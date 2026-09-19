@@ -30,7 +30,7 @@
     "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "^6.1.1",
     "axe-core": "^4.12.1",
-    "happy-dom": "^20.10.3",
+    "happy-dom": "^20.14.5",
     "jsdom": "^30.0.1",
     "typescript": "^6.0.3",
     "vite": "^8.3.0",
