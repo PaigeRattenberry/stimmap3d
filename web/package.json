@@ -32,7 +32,7 @@
     "axe-core": "^4.12.1",
     "happy-dom": "^20.14.5",
     "jsdom": "^30.0.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vitest": "^4.1.9",
     "vitest-axe": "^0.1.0"
