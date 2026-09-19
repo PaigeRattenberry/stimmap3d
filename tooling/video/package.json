@@ -1,0 +1,16 @@
+{
+  "name": "stimmap3d-video-tooling",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Author-time demo-video recorder for StimMap3D. Drives the shipped app with Playwright and records a screen video. NEVER on the live path; intentionally NOT an npm workspace (see ../../package.json). Chromium is pre-warmed into the shared ms-playwright cache; do not re-download.",
+  "scripts": {
+    "record": "node record.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

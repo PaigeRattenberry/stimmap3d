@@ -1,0 +1,30 @@
+{
+  "note": "10-20 scalp-electrode positions in MNI mm (RAS: +X right, +Y anterior, +Z superior), consistent with the ICBM152 meshes. Values are the FieldTrip/Oostenveld standard_1020 template (already in MNI mm scalp-surface coordinates), used because MNE-Python's standard_1005 montage ships in fiducial-based 'head' coordinates rather than MNI. These are SCALP sites; TMSCoil projects each onto the scalp surface along the head-centroid radial. The F3 preset uses the F3 ELECTRODE site (the Beam-F3 coil position), NOT a cortical DLPFC target. NOTE: Okamoto 2004 (often cited for 10-20 MNI coords) reports CORTICAL PROJECTION points, not scalp positions, so it is not cited here. See citations.json -> standard-1020-electrodes.",
+  "frame": "MNI",
+  "electrodes": [
+    {
+      "name": "F3",
+      "mni": [-50.2, 53.1, 42.2],
+      "region": "left frontal (F3) — over left DLPFC",
+      "source": "FieldTrip standard_1020.elc (MNI mm)"
+    },
+    {
+      "name": "F4",
+      "mni": [51.8, 54.3, 40.8],
+      "region": "right frontal (F4) — over right DLPFC",
+      "source": "FieldTrip standard_1020.elc (MNI mm)"
+    },
+    {
+      "name": "Fz",
+      "mni": [0.3, 58.5, 66.5],
+      "region": "frontal midline",
+      "source": "FieldTrip standard_1020.elc (MNI mm)"
+    },
+    {
+      "name": "Cz",
+      "mni": [0.4, -9.2, 100.2],
+      "region": "vertex (central midline)",
+      "source": "FieldTrip standard_1020.elc (MNI mm)"
+    }
+  ]
+}

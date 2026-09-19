@@ -1,0 +1,21 @@
+# Cloudflare Pages response headers — Vite copies this file verbatim into web/dist; Pages applies it
+# and never serves it. (`npm run preview` ignores it.) Guarded by src/deployArtifacts.test.ts.
+#
+# No X-Frame-Options / frame-ancestors on purpose: the demo carries no auth or state worth
+# clickjacking, and an educational page may embed it. No CSP yet: R3F/drei inject inline
+# styles and the solver runs in a module Worker, so a CSP needs its own verified pass.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+# Vite content-hashes every file under /assets/ (JS, CSS, the E-field worker), so a changed file
+# always gets a new URL — safe to cache for a year.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Meshes keep stable, UNHASHED names — never mark them immutable, or a re-baked mesh would be stuck
+# in browser caches. Cache for a day, then revalidate.
+/models/*
+  Cache-Control: public, max-age=86400, must-revalidate

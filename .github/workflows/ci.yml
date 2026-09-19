@@ -1,0 +1,76 @@
+name: CI
+
+# Required-check enforcement is an external repository setting; see docs/release-controls.md.
+on:
+  push:
+    branches: [main]
+  # Check stacked PRs as well as PRs targeting main.
+  pull_request:
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  build-test:
+    name: Build & test (Node 24)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check:toolchain
+      - run: npm test
+      - run: npm run build
+      - run: npm ci --prefix tooling/video
+      - run: npx --prefix tooling/video playwright install --with-deps chromium
+      - run: npm run test:browser
+  audit:
+    name: Dependency audit (${{ matrix.root }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        root: ['.', 'tooling', 'tooling/video']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: ${{ matrix.root }}/package-lock.json
+      - run: npm ci --prefix "${{ matrix.root }}"
+      # Includes development dependencies. Repository maintainer owns findings in all three roots.
+      - run: npm audit --prefix "${{ matrix.root }}"
+      - name: Smoke-test image authoring
+        if: matrix.root == 'tooling'
+        env:
+          STIMMAP_OG_OUTPUT: ${{ runner.temp }}/stimmap-og-smoke.png
+        run: npm run make-og-image --prefix tooling
+
+  mesh-pipeline:
+    name: Mesh pipeline and clinical anchors
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tooling/requirements.txt
+      - run: npm ci --prefix tooling
+      - run: python -m pip install -r tooling/requirements.txt
+      - run: node tooling/prep_meshes.mjs --out-dir .cache/node-meshes
+      - run: python tooling/prep_meshes.py --out-dir .cache/python-meshes
+      - run: node tooling/verify_meshes.mjs .cache/node-meshes .cache/python-meshes
+      - run: python tooling/verify_trials.py
+      - run: python -m unittest discover -s tooling -p test_mesh_sources.py

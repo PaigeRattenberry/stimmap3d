@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "reviewed": "2026-09-15",
+  "note": "Per-asset/number provenance ledger (DESIGN §4). Each entry records the required triad: url + license + type. Assets redistributed in web/dist also carry the verbatim `notice` their license requires (mapped in SHIPPED_ASSETS). Validated by citations.test.ts.",
+  "entries": [
+    {
+      "id": "niivue-icbm152-mesh",
+      "label": "NiiVue MNI152-2009 whole-cortex surface (MZ3)",
+      "type": "asset",
+      "use": "Cortical surface → brain.glb",
+      "source": "NiiVue demo assets (niivue/niivue)",
+      "url": "https://github.com/niivue/niivue/blob/ff3e68d3918d780b7346fe9593965e8433b19840/packages/niivue/demos/images/mni152_2009.mz3",
+      "license": "BSD-2-Clause",
+      "notice": "BSD 2-Clause License\n\nCopyright (c) 2021, Niivue\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
+      "notes": "MNI-aligned whole-brain cortical surface (~306k verts). tooling/prep_meshes decimates it to ~40k verts (meshoptimizer) and meshopt-compresses to brain.glb. Whole cortex chosen over a single hemisphere, since right-DLPFC 1 Hz is also shown. The surface is derived from the MNI ICBM152 2009 template, so brain.glb also carries the ICBM152 notice (see the ICBM152 2009c entry). Notice text reproduced verbatim from github.com/niivue/niivue/blob/main/LICENSE (fetched 2026-09-13).",
+      "distribution": "redistributed"
+    },
+    {
+      "id": "mni-icbm152-2009-t1",
+      "label": "MNI ICBM152 2009c (asym) whole-head T1 — via TemplateFlow",
+      "type": "asset",
+      "use": "Derive scalp surface via marching cubes",
+      "source": "TemplateFlow tpl-MNI152NLin2009cAsym (ICBM152 2009c; MNI / McGill BIC)",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz",
+      "license": "ICBM152 terms (permissive, BSD-like, commercial-OK)",
+      "notice": "Copyright (C) 1993–2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University. Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies. The authors and McGill University make no representations about the suitability of this software for any purpose. It is provided “as is” without express or implied warranty. The authors are not responsible for any data loss, equipment damage, property loss, or injury to subjects or patients resulting from the use or misuse of this software package.",
+      "notes": "Whole-head T1 (the NiiVue ICBM152 demo volumes are brain-extracted, so a whole-head template is needed for a scalp). tooling/prep_meshes runs marching cubes at the air→skin step in MNI/RAS mm → scalp.glb, so the scalp encloses the cortex. Notice text reproduced verbatim from the TemplateFlow tpl-MNI152NLin2009cAsym LICENSE (fetched 2026-09-13); it applies to both scalp.glb and brain.glb (ICBM152-derived).",
+      "distribution": "redistributed"
+    },
+    {
+      "id": "mne-standard-1005",
+      "label": "MNE-Python standard_1005 / 1020 montage",
+      "type": "asset",
+      "use": "Reference 10-20 montage considered for the electrode coordinates",
+      "source": "MNE-Python (mne-tools)",
+      "url": "https://github.com/mne-tools/mne-python",
+      "license": "BSD-3-Clause",
+      "notes": "MNE's standard_1005 montage ships in fiducial-based 'head' coordinates (not MNI mm), so the app does NOT use it directly for placement. The MNI-mm scalp coordinates in electrodes.json come from the FieldTrip standard_1020 template instead (see standard-1020-electrodes). Kept here as the canonical open 10-20 montage reference.",
+      "distribution": "reference-only"
+    },
+    {
+      "id": "standard-1020-electrodes",
+      "label": "FieldTrip standard_1020 template electrode positions (MNI mm)",
+      "type": "asset",
+      "use": "F3/F4/Fz/Cz scalp coordinates → electrodes.json (targeting presets)",
+      "source": "FieldTrip (Oostenveld et al.) template/electrode/standard_1020.elc",
+      "url": "https://github.com/fieldtrip/fieldtrip/blob/master/template/electrode/standard_1020.elc",
+      "license": "Citable",
+      "notes": "10-20 SCALP electrode positions already registered to MNI mm: F3 (-50.2, 53.1, 42.2), F4 (51.8, 54.3, 40.8), Fz (0.3, 58.5, 66.5), Cz (0.4, -9.2, 100.2). Only these factual coordinates are used (not FieldTrip's GPL code). NOTE: Okamoto 2004 — often cited for 10-20 MNI coords — reports CORTICAL PROJECTION points, not scalp positions, so it is not used here. Values verified verbatim against the .elc file (2026-06-19).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "harvard-oxford-atlas",
+      "label": "Harvard-Oxford cortical atlas",
+      "type": "asset",
+      "use": "Considered atlas overlay; no atlas is shipped",
+      "source": "FSL / FMRIB",
+      "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Atlases",
+      "license": "CC-BY-SA-4.0",
+      "notes": "Not redistributed or used by the current runtime. Verify original atlas terms before implementing an overlay; the recorded license is reference metadata, not a redistribution approval.",
+      "distribution": "reference-only"
+    },
+    {
+      "id": "brodmann-mricrogl",
+      "label": "Brodmann BA9/46 + BA25 overlay",
+      "type": "asset",
+      "use": "Optional labeled DLPFC / sgACC overlay",
+      "source": "MRIcroGL (Rorden lab)",
+      "url": "https://github.com/rordenlab/MRIcroGL",
+      "license": "BSD-2-Clause",
+      "notes": "Optional; only if a labeled overlay is added.",
+      "distribution": "reference-only"
+    },
+    {
+      "id": "fox-2012-sgacc-target",
+      "label": "Fox et al. 2012 — sgACC-connectivity DLPFC target",
+      "type": "number",
+      "use": "Connectivity-based DLPFC preset coordinate",
+      "source": "Fox, Buckner, White, Greicius & Pascual-Leone 2012, Biological Psychiatry 72(7):595-603 (PMID 22658708; DOI 10.1016/j.biopsych.2012.04.028)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22658708/",
+      "license": "Citable (factual MNI coordinate)",
+      "notes": "The connectivity preset uses the group-average left-DLPFC peak ANTICORRELATED with the subgenual-ACC seed: MNI (-44, 38, 34) — the paper's own attribution ('the peak anticorrelation in the left DLPFC (-44 38 34, Fig 3A)'). Fox also reports an efficacy-seed optimum at (-38, 44, 26) (Fig. 3B). The sgACC SEED is a 10 mm sphere at (6, 16, -10) — a reference region, NOT a coil target. CORRECTION (verified 2026-06-19, adversarially against the clean PMC HTML full text PMC4120275 where minus signs/table cells render unambiguously): the widely-quoted (-44, 40, 29) is Fox's a-priori 'BA46-center' candidate target (Table 1B), not the connectivity-derived peak, so it is deliberately NOT used. CAVEAT 1 (coordinate space): that (-44, 40, 29) is the MNI conversion of the Rajkowska & Goldman-Rakic 1995 anatomical Talairach coordinate (-44, 40, 25), per Table 1B. CAVEAT 2 (edition): Fox's 2013 follow-up (PMC3594474) re-reports the same subgenual peak as (-42, 38, 34) (x shifted 2 mm); we use the (-44, 38, 34) value verbatim from the 2012 original. Weigand 2018 further refines the optimum to (-42, 44, 30) on an N=1000 connectome — see weigand-2018-connectivity. All are group-average optima; individualized targeting is a separate extension.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "fox-2012-sgacc-seed",
+      "label": "Fox et al. 2012 — subgenual-ACC (sgACC) connectivity seed coordinate",
+      "type": "number",
+      "use": "sgACC SEED marker — deep end of the schematic DLPFC→sgACC cue",
+      "source": "Fox, Buckner, White, Greicius & Pascual-Leone 2012, Biological Psychiatry 72(7):595-603 (PMID 22658708; DOI 10.1016/j.biopsych.2012.04.028)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22658708/",
+      "license": "Citable",
+      "notes": "The subgenual-ACC SEED region behind Fox 2012's connectivity analysis: a 10 mm sphere centred at MNI (6, 16, -10). It is a resting-state REFERENCE region, NOT a coil target and NOT a 10-20 scalp electrode — the connectivity preset stimulates the DLPFC site (-44, 38, 34) most ANTICORRELATED with this seed (see fox-2012-sgacc-target). The optional electrode-marker layer draws it as the deep end of a DLPFC→sgACC cue that is SCHEMATIC / illustrative of that anticorrelation rationale — it is NOT a computed connectome or tractography and carries no quantitative connectivity value. NEVER attribute the seed/electrode targeting to PMID 25922128 (an unrelated tES-sensations paper).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "beam-2009-f3",
+      "label": "Beam et al. 2009 — Beam-F3 localization method",
+      "type": "number",
+      "use": "F3 (Beam-F3) preset method attribution",
+      "source": "Beam, Borckardt, Reeves & George 2009, Brain Stimulation 2(1):50-54 (PMID 20539835; DOI 10.1016/j.brs.2008.09.006)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20539835/",
+      "license": "Citable",
+      "notes": "An efficient/accurate method for locating the F3 position for prefrontal TMS from three head measurements (tragus-to-tragus, nasion-to-inion, head circumference) — faster than full 10-20 montaging. Attribute the Beam-F3 scalp heuristic to Beam et al. 2009.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "mir-moghtadaei-2015-beamf3",
+      "label": "Mir-Moghtadaei et al. 2015 — BeamF3 vs MRI-neuronavigated concordance",
+      "type": "number",
+      "use": "Beam-F3 accuracy claim (targeting explainer)",
+      "source": "Mir-Moghtadaei, Caballero, Fried et al. 2015, Brain Stimulation 8(5):965-973 (PMID 26115776; DOI 10.1016/j.brs.2015.05.008)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26115776/",
+      "license": "Citable",
+      "notes": "BeamF3-to-MRI-neuronavigated-target discrepancy: <0.65 cm in 50% (MEDIAN), <0.99 cm in 75%, <1.36 cm in 95% of subjects — so 0.65 cm is a median, NOT a hard bound. The MRI-neuronavigated DLPFC target was MNI (-38, +44, +26) (derived by reverse-coregistration from the Fox-suggested optimal target). This is why Beam-F3 lands close to the connectivity target.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "weigand-2018-connectivity",
+      "label": "Weigand et al. 2018 — N=1000 sgACC-connectivity target refinement",
+      "type": "number",
+      "use": "Connectivity preset refinement note",
+      "source": "Weigand, Horn, Caballero et al. 2018, Biological Psychiatry 84(1):28-37 (PMID 29274805; DOI 10.1016/j.biopsych.2017.10.028)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29274805/",
+      "license": "Citable",
+      "notes": "Prospective validation that subgenual connectivity predicts TMS antidepressant efficacy. Using an N=1000 normative connectome, the peak subgenual-anticorrelation in left DLPFC was MNI (-42, 44, 30) — between Fox 2012's two reported peaks (-44, 38, 34) and (-38, 44, 26). Group-average optimum.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "five-cm-rule-deprecation",
+      "label": "5-cm rule misses DLPFC (Herwig 2001; Trapp 2020)",
+      "type": "number",
+      "use": "5-cm-rule deprecated-method explainer",
+      "source": "Herwig, Padberg, Unger, Spitzer & Schonfeldt-Lecuona 2001, Biological Psychiatry 50(1):58-61 (PMID 11457424; DOI 10.1016/s0006-3223(01)01153-2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11457424/",
+      "license": "Citable",
+      "notes": "The standard 5-cm method correctly targeted DLPFC (BA9) in only 7 of 22 subjects (31.8%); in 15/22 (68.2%) the coil landed more dorsally (e.g. premotor) — i.e. it misses the DLPFC in well over 1/3 of patients (the >1/3 claim is conservative). Ignores head size: the true DLPFC sits ~7 cm (not 5 cm) anterior to the motor hotspot (Ahdab 2010, PMID 20230933). The 5.5-cm-rule cortical target is MNI (-33.6, 30.8, 51.1) and Beam-F3's cortical projection is (-40.6, 41.7, 34.3) (Trapp et al. 2020, Brain Stimulation 13(3):578-581, PMID 32289680).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "mutz-2019-nma",
+      "label": "Mutz et al. 2019 — network meta-analysis",
+      "type": "number",
+      "use": "Dose–response RESPONSE odds ratios vs sham by protocol",
+      "source": "Mutz, Vipulananthan, Carter, Hurlemann, Fu & Young 2019, BMJ 364:l1079 (PMID 30917990; PMCID PMC6435996; DOI 10.1136/bmj.l1079)",
+      "url": "https://www.bmj.com/content/364/bmj.l1079",
+      "license": "Open access (CC-BY-NC)",
+      "notes": "RESPONSE odds ratios vs sham (the panel uses HF-L, LF-R, iTBS): high-frequency LEFT rTMS 3.17 (95% CI 2.29–4.37); low-frequency RIGHT rTMS 3.65 (2.13–6.24); intermittent theta-burst stimulation 3.20 (1.45–7.08). (For context: bilateral rTMS 4.92; tDCS 2.65; bitemporal ECT 8.91.) CORRECTION (verified 2026-06-20 verbatim against the open-access Europe PMC deposit PMC6435996): the model is FREQUENTIST multivariate random-effects (REML), so these are 95% CONFIDENCE intervals, NOT Bayesian credible intervals. Primary outcome = RESPONSE, 'defined in most trials as a 50% or greater reduction in depressive symptoms at primary treatment endpoint' (HDRS preferred when both HDRS & MADRS reported); ITT / modified-ITT preferred over completers. Sham arms were merged into ONE reference node, so the paper gives no single sham absolute rate — convert ORs to probabilities against a SEPARATELY-sourced, labeled sham baseline (see berlim-2014-sham), never plotting ORs and raw percentages on one axis (DESIGN §4, gate (c)). Per-protocol remission ORs live in the supplementary appendix (not the main text) and are not used here.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "three-d-blumberger-2018",
+      "label": "THREE-D (Blumberger et al. 2018)",
+      "type": "number",
+      "use": "iTBS vs 10 Hz absolute response/remission rates",
+      "source": "Blumberger, Vila-Rodriguez, Thorpe, et al. 2018, Lancet 391(10131):1683-1692 (PMID 29726344; DOI 10.1016/S0140-6736(18)30295-2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29726344/",
+      "license": "Citable",
+      "notes": "Head-to-head non-inferiority RCT (NO sham arm). VERIFIED 2026-06-20 (PubMed abstract + corroborating Table-2 readings): iTBS response 49% (exact 49.2%, 95/193), remission 32% (31.6%, 61/193); 10 Hz response 47% (47.4%, 91/192), remission 27% (26.6%, 51/192). Scale = 17-item HRSD; response = ≥50% HRSD-17 reduction; remission = HRSD-17 < 8. IMPORTANT CORRECTIONS vs the earlier seed: (1) these are PER-PROTOCOL among ASSESSED participants (denominators 192/193), NOT intention-to-treat over the 205/209 randomised; (2) they are the 4–6-week primary-completion-point rates, NOT a 12-week post-treatment timepoint. These are absolute within-arm rates — never an odds ratio and never relative to sham.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "berlim-2014",
+      "label": "Berlim et al. 2014 — HF-rTMS meta-analysis",
+      "type": "number",
+      "use": "HF-rTMS absolute response/remission rates + sham arms",
+      "source": "Berlim, van den Eynde, Tovar-Perdomo & Daskalakis 2014, Psychological Medicine 44(2):225-239 (PMID 23507264; DOI 10.1017/S0033291713000512)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23507264/",
+      "license": "Citable",
+      "notes": "Meta-analysis of 29 randomised, double-blind, sham-controlled HF-rTMS trials (N=1371; ~13 sessions). VERIFIED 2026-06-20 verbatim against the abstract: active HF-rTMS 29.3% response / 18.6% remission, 'compared with 10.4% and 5% of those receiving sham rTMS'; pooled OR 3.3 (p<0.0001) for both response and remission (NNT 6 and 8). Response = ≥50% reduction on HAM-D/HDRS or MADRS; remission cut-offs were heterogeneous across studies (HAM-D/HDRS ≤7 in most, ≤8 or ≤10 in a few; MADRS <10 in one) — treat the exact cut-off as medium-confidence (paywalled full text). The SHAM arms here are the sham baseline used for OR→probability conversion — see berlim-2014-sham. (Sham '5%' is printed without a decimal — no false precision.)",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "berlim-2014-sham",
+      "label": "Berlim et al. 2014 — pooled SHAM response/remission baseline",
+      "type": "number",
+      "use": "Explicit, labeled sham baseline p0 for OR→probability conversion (DESIGN §4)",
+      "source": "Berlim, van den Eynde, Tovar-Perdomo & Daskalakis 2014, Psychological Medicine 44(2):225-239 (PMID 23507264; DOI 10.1017/S0033291713000512), sham arms",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23507264/",
+      "license": "Citable",
+      "notes": "Sham (placebo) baseline used as p0 in the panel's OR→probability conversion: RESPONSE p0 = 10.4%, REMISSION p0 = 5% — the pooled sham-arm proportions from the same 29 sham-controlled RCTs ('compared with 10.4% and 5% of those receiving sham rTMS'; verified 2026-06-20). Internally matched to Berlim's own OR (3.3), so it is an appropriate, sham-referenced p0 for the Mutz 2019 ORs (also sham-referenced). NOT used: Razza et al. 2018 (PMID 29111404) reports placebo response only as a continuous Hedges' g (0.8), not a dichotomous rate, so it cannot serve as a p0.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "cole-snt-saint",
+      "label": "Cole et al. 2022 — Stanford Neuromodulation Therapy (SNT) RCT",
+      "type": "number",
+      "use": "Accelerated-protocol context — sham-controlled RCT (separate callout)",
+      "source": "Cole, Phillips, Bentzley, et al. 2022, American Journal of Psychiatry 179(2):132-141 (PMID 34711062; DOI 10.1176/appi.ajp.2021.20101429)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34711062/",
+      "license": "Citable",
+      "notes": "Double-blind sham-controlled RCT of accelerated fMRI-guided iTBS (90,000 pulses / 5 days), MADRS-based (remission = MADRS ≤10, response = ≥50% MADRS reduction). VERIFIED 2026-06-20: remission 78.6% (11/14) active vs 13.3% (2/15) sham; response 85.7% (12/14) vs 26.7% (4/15); primary continuous outcome mean % MADRS reduction 52.5% active vs 11.1% sham at 4 weeks. CAVEATS: very small n=29, STOPPED at a planned interim (effect likely inflated); the categorical rates are CUMULATIVE 'achieved in ≥1 of 5 post-treatment assessments across the 4-week window', NOT single-timepoint (point-prevalence remission immediately post-treatment ≈57%); 4-week durability only; a larger replication (Kratter, World Psychiatry 2026, n=48) reports a more modest ~50% vs ~21% remission. Surfaced QUARANTINED — never folded into the standard-protocol comparison, never an OR, never a sham baseline. The ~90% headline is the open-label pilot, not this RCT — see cole-2020-saint-pilot.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "cole-2020-saint-pilot",
+      "label": "Cole et al. 2020 — SAINT open-label pilot",
+      "type": "number",
+      "use": "Accelerated-protocol context — uncontrolled open-label pilot (separate callout)",
+      "source": "Cole, Stimpson, Bentzley, et al. 2020, American Journal of Psychiatry 177(8):716-726 (PMID 32252538; DOI 10.1176/appi.ajp.2019.19070720)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32252538/",
+      "license": "Citable",
+      "notes": "SINGLE-ARM, UNCONTROLLED open-label pilot of accelerated fMRI-guided iTBS (SAINT). VERIFIED 2026-06-20: remission (MADRS <11, i.e. ≤10) 90.5% (19/21) completer / 86.4% (19/22) intent-to-treat. This is the source of the often-quoted ~90% remission figure — it has NO sham arm and must NEVER be shown as sham-adjusted or as an odds ratio. Shown only as labeled experimental context.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "deng-2013-depth-focality",
+      "label": "Deng, Lisanby & Peterchev 2013 — TMS depth–focality tradeoff",
+      "type": "number",
+      "use": "Figure-8 calibration sanity-check for the analytical E-field solver (half-value depth, focality)",
+      "source": "Deng, Lisanby & Peterchev 2013, Brain Stimulation 6(1):1–13 (doi:10.1016/j.brs.2012.02.005)",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3568257/",
+      "license": "Citable",
+      "notes": "Figure-8 half-value depth d½ ≈ 0.9–3.4 cm (radial distance from the cortical surface to the deepest point where E = ½ of its cortical-surface max) and focality S½ down to ≈5 cm² (defined as V½/d½, an area-EQUIVALENT, not a planar contour). The solver's measured d½ ≈ 11 mm sits in this band. CAVEAT (verified): Deng 2013 reports NORMALIZED fields and gives NO absolute V/m; absolute field estimates from other dosimetry must not be presented as outputs of this model. The solver outputs RELATIVE units only (gate (e)) — these ranges are sanity anchors, not solver outputs. The depth–dose readout surfaces this d½ (and an on-surface half-max spread S½) as the coil is tilted / stood off — illustrative, relative, never validated cm.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "stokes-2005-output-distance",
+      "label": "Stokes et al. 2005 — coil-to-cortex distance vs stimulator output",
+      "type": "number",
+      "use": "Context for the depth–dose readout: coil-to-cortex distance and required stimulator output (no output calculator)",
+      "source": "Stokes, Chambers, Gould, Henderson, Janko, Allen & Mattingley 2005, Journal of Neurophysiology 94(6):4520-4527 (PMID 16135552; DOI 10.1152/jn.00067.2005)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16135552/",
+      "license": "Citable",
+      "notes": "Motor-cortex study: increasing coil-to-cortex distance required additional stimulator output to maintain equivalent stimulation. This is a compensatory motor-threshold relationship, not a decreasing delivered-output percentage. Cited as context only; no machine-output calculator is implemented. The app’s 0.32 mm/degree tilt lift is an authored heuristic, not derived from this study or Deng.",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "bungert-2017-direction",
+      "label": "Bungert et al. 2017 — induced-field direction / orientation dependence",
+      "type": "number",
+      "use": "E-field DIRECTION glyphs — orientation dependence of the TMS effect",
+      "source": "Bungert, Antunes, Espenhahn & Thielscher 2017, Cerebral Cortex 27(11):5083 (DOI 10.1093/cercor/bhw292)",
+      "url": "https://doi.org/10.1093/cercor/bhw292",
+      "license": "Citable",
+      "notes": "\"Where does TMS Stimulate the Motor Cortex?\" — combines TMS electrophysiology with realistic SimNIBS field estimates to localize the affected cortex. Cited for the direction glyphs: the induced field's ORIENTATION relative to cortical (gyral/sulcal) geometry co-determines which neural elements are engaged, so direction — not just magnitude — matters for the effect. NUANCE: the paper's HEADLINE result is that gyral-crown field STRENGTH best predicts the affected position; it nonetheless establishes strong orientation dependence (corroborated by Janssen 2015; Souza 2024). Used ONLY to justify showing field DIRECTION in relative units — the glyphs are constant-length and explicitly NOT a model of neural activation (gate (e)).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "turbo-colormap-google-2019",
+      "label": "Google Research 'Turbo' colormap — improved rainbow, not perceptually uniform",
+      "type": "number",
+      "use": "Methods colour-scale note: why Turbo is offered but kept off-default and not called colour-blind-safe",
+      "source": "Mikhailov, 'Turbo, An Improved Rainbow Colormap for Visualization', Google AI Blog, 2019",
+      "url": "https://research.google/blog/turbo-an-improved-rainbow-colormap-for-visualization/",
+      "license": "Citable",
+      "notes": "Turbo is a smoother rainbow map (a drop-in jet replacement) tuned for high contrast. The post is explicit that, unlike viridis, it is NOT perceptually uniform — equal steps in value are not equal steps in perceived lightness — so it can exaggerate or hide gradients. Used here ONLY to justify keeping turbo optional/off-default and to avoid claiming it is colour-blind-safe (gate (e): the field stays in relative units regardless of colormap).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "nunez-2018-cividis",
+      "label": "Nuñez, Anderton & Renslow 2018 — cividis CVD-optimised colormap",
+      "type": "number",
+      "use": "Methods colour-scale note: cividis as a perceptually-uniform, colour-vision-deficiency-optimised option",
+      "source": "Nuñez, Anderton & Renslow 2018, PLOS ONE 13(7):e0199239 (DOI 10.1371/journal.pone.0199239)",
+      "url": "https://doi.org/10.1371/journal.pone.0199239",
+      "license": "Citable",
+      "notes": "Introduces cividis: a perceptually-uniform sequential colormap optimised so that viewers with the common colour-vision deficiencies (deuteranopia/protanopia) perceive the same data ordering as trichromats (near-isoluminant in the red–green channel). Cited for offering cividis as the CVD-friendly heatmap option; it maps the same relative-units field as viridis/turbo (gate (e)).",
+      "distribution": "cited-fact"
+    },
+    {
+      "id": "simnibs",
+      "label": "SimNIBS",
+      "type": "software",
+      "use": "Possible future offline FEM comparison; no SimNIBS code or output is shipped",
+      "source": "SimNIBS project",
+      "url": "https://github.com/simnibs/simnibs",
+      "license": "GPL-3.0",
+      "notes": "Reference only. Any future workflow must separately verify software and output provenance.",
+      "distribution": "reference-only"
+    }
+  ]
+}

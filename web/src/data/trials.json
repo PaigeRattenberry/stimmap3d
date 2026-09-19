@@ -1,0 +1,1758 @@
+{
+  "note": "PRE-BAKED synthetic dose–response data (DESIGN §3 honesty layer). Generated author-time by tooling/generate_trials.mjs (Node generator) under a FIXED seed. Per-protocol response/remission rates and odds ratios are CITED to primary sources; every per-patient MADRS/BDI trajectory is SYNTHETIC. Odds ratios (Mutz 2019) are relative to sham and are converted to probabilities only against the explicit, sourced sham baseline below (DESIGN §4) — never mixed with directly-measured rates.",
+  "synthetic": true,
+  "generator": "tooling/generate_trials.mjs",
+  "seed": 20260620,
+  "definitions": {
+    "response": "≥50% reduction from baseline symptom score (per the cited trial; scale noted per protocol)",
+    "remission": "MADRS ≤ 10 (the THREE-D 10 Hz/iTBS anchors use HRSD-17 < 8; both noted per protocol)"
+  },
+  "shamBaseline": {
+    "responseRate": 0.104,
+    "remissionRate": 0.05,
+    "citationId": "berlim-2014-sham",
+    "note": "Pooled sham (placebo) response/remission used as the baseline p0 for OR→probability conversion (DESIGN §4)."
+  },
+  "protocols": [
+    {
+      "id": "10hz-hf-l",
+      "label": "10 Hz HF-L",
+      "longLabel": "High-frequency 10 Hz rTMS, left DLPFC",
+      "arm": "THREE-D 10 Hz arm (Blumberger 2018; per-protocol)",
+      "rates": {
+        "responseRate": 0.47,
+        "remissionRate": 0.27,
+        "source": "measured",
+        "remissionSource": "measured",
+        "citationId": "three-d-blumberger-2018",
+        "definition": "Response = ≥50% reduction in HRSD-17; remission = HRSD-17 < 8. THREE-D 10 Hz arm, per-protocol among assessed (denom 192/205), 4–6-week endpoint."
+      },
+      "odds": {
+        "response": {
+          "or": 3.17,
+          "ciLow": 2.29,
+          "ciHigh": 4.37,
+          "citationId": "mutz-2019-nma"
+        }
+      },
+      "cohortSize": 40,
+      "summary": [
+        {
+          "week": 0,
+          "madrsMean": 30.2,
+          "madrsSd": 3.8,
+          "bdiMean": 30,
+          "bdiSd": 7.4
+        },
+        {
+          "week": 1,
+          "madrsMean": 24.8,
+          "madrsSd": 4.5,
+          "bdiMean": 24.5,
+          "bdiSd": 6.8
+        },
+        {
+          "week": 2,
+          "madrsMean": 21.3,
+          "madrsSd": 5.5,
+          "bdiMean": 21,
+          "bdiSd": 7
+        },
+        {
+          "week": 3,
+          "madrsMean": 19.3,
+          "madrsSd": 6.2,
+          "bdiMean": 19.1,
+          "bdiSd": 7.5
+        },
+        {
+          "week": 4,
+          "madrsMean": 18.1,
+          "madrsSd": 6.7,
+          "bdiMean": 18.1,
+          "bdiSd": 7.7
+        },
+        {
+          "week": 5,
+          "madrsMean": 17.4,
+          "madrsSd": 7.3,
+          "bdiMean": 17.2,
+          "bdiSd": 7.7
+        },
+        {
+          "week": 6,
+          "madrsMean": 16.6,
+          "madrsSd": 7.4,
+          "bdiMean": 16.6,
+          "bdiSd": 8
+        }
+      ],
+      "patients": [
+        {
+          "id": 0,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 23.3,
+              "bdi": 37.7
+            },
+            {
+              "week": 1,
+              "madrs": 20.7,
+              "bdi": 30.7
+            },
+            {
+              "week": 2,
+              "madrs": 17.4,
+              "bdi": 26.6
+            },
+            {
+              "week": 3,
+              "madrs": 17.4,
+              "bdi": 24.7
+            },
+            {
+              "week": 4,
+              "madrs": 17.7,
+              "bdi": 20.8
+            },
+            {
+              "week": 5,
+              "madrs": 11.9,
+              "bdi": 21.1
+            },
+            {
+              "week": 6,
+              "madrs": 13.7,
+              "bdi": 19.7
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 39.9,
+              "bdi": 32.2
+            },
+            {
+              "week": 1,
+              "madrs": 39.3,
+              "bdi": 30.3
+            },
+            {
+              "week": 2,
+              "madrs": 35.9,
+              "bdi": 32.3
+            },
+            {
+              "week": 3,
+              "madrs": 36.3,
+              "bdi": 30.8
+            },
+            {
+              "week": 4,
+              "madrs": 35.4,
+              "bdi": 29.8
+            },
+            {
+              "week": 5,
+              "madrs": 34.8,
+              "bdi": 28.5
+            },
+            {
+              "week": 6,
+              "madrs": 35.9,
+              "bdi": 28.1
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 30.1,
+              "bdi": 20.2
+            },
+            {
+              "week": 1,
+              "madrs": 18.1,
+              "bdi": 12.6
+            },
+            {
+              "week": 2,
+              "madrs": 12.7,
+              "bdi": 8.6
+            },
+            {
+              "week": 3,
+              "madrs": 6.1,
+              "bdi": 4.5
+            },
+            {
+              "week": 4,
+              "madrs": 5,
+              "bdi": 5
+            },
+            {
+              "week": 5,
+              "madrs": 3.6,
+              "bdi": 4.6
+            },
+            {
+              "week": 6,
+              "madrs": 3.8,
+              "bdi": 2.9
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 32.9,
+              "bdi": 37.5
+            },
+            {
+              "week": 1,
+              "madrs": 27.5,
+              "bdi": 32
+            },
+            {
+              "week": 2,
+              "madrs": 22.7,
+              "bdi": 29.9
+            },
+            {
+              "week": 3,
+              "madrs": 21.2,
+              "bdi": 27.3
+            },
+            {
+              "week": 4,
+              "madrs": 21.8,
+              "bdi": 26.3
+            },
+            {
+              "week": 5,
+              "madrs": 21.6,
+              "bdi": 22.7
+            },
+            {
+              "week": 6,
+              "madrs": 18.1,
+              "bdi": 24.5
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 33.6,
+              "bdi": 25.8
+            },
+            {
+              "week": 1,
+              "madrs": 30.7,
+              "bdi": 23.1
+            },
+            {
+              "week": 2,
+              "madrs": 30.5,
+              "bdi": 22.4
+            },
+            {
+              "week": 3,
+              "madrs": 28.4,
+              "bdi": 20.7
+            },
+            {
+              "week": 4,
+              "madrs": 28.1,
+              "bdi": 19.6
+            },
+            {
+              "week": 5,
+              "madrs": 26.8,
+              "bdi": 21.3
+            },
+            {
+              "week": 6,
+              "madrs": 27.1,
+              "bdi": 18.6
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 32.7,
+              "bdi": 35.7
+            },
+            {
+              "week": 1,
+              "madrs": 22.2,
+              "bdi": 23.6
+            },
+            {
+              "week": 2,
+              "madrs": 12.7,
+              "bdi": 13.9
+            },
+            {
+              "week": 3,
+              "madrs": 10.7,
+              "bdi": 8.6
+            },
+            {
+              "week": 4,
+              "madrs": 7.3,
+              "bdi": 7.2
+            },
+            {
+              "week": 5,
+              "madrs": 4.7,
+              "bdi": 6.5
+            },
+            {
+              "week": 6,
+              "madrs": 4.5,
+              "bdi": 3
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 29,
+              "bdi": 32.9
+            },
+            {
+              "week": 1,
+              "madrs": 24.5,
+              "bdi": 30.2
+            },
+            {
+              "week": 2,
+              "madrs": 24.9,
+              "bdi": 28
+            },
+            {
+              "week": 3,
+              "madrs": 20.7,
+              "bdi": 24
+            },
+            {
+              "week": 4,
+              "madrs": 21.3,
+              "bdi": 23.2
+            },
+            {
+              "week": 5,
+              "madrs": 20.2,
+              "bdi": 27.6
+            },
+            {
+              "week": 6,
+              "madrs": 21.2,
+              "bdi": 25
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 35.7,
+              "bdi": 29.3
+            },
+            {
+              "week": 1,
+              "madrs": 25.6,
+              "bdi": 18.1
+            },
+            {
+              "week": 2,
+              "madrs": 21.2,
+              "bdi": 14.7
+            },
+            {
+              "week": 3,
+              "madrs": 18.3,
+              "bdi": 10
+            },
+            {
+              "week": 4,
+              "madrs": 17.7,
+              "bdi": 8.9
+            },
+            {
+              "week": 5,
+              "madrs": 16,
+              "bdi": 6.6
+            },
+            {
+              "week": 6,
+              "madrs": 13.9,
+              "bdi": 7.8
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 32.5,
+              "bdi": 30.5
+            },
+            {
+              "week": 1,
+              "madrs": 25.2,
+              "bdi": 24.6
+            },
+            {
+              "week": 2,
+              "madrs": 21.9,
+              "bdi": 19.2
+            },
+            {
+              "week": 3,
+              "madrs": 15.8,
+              "bdi": 13.5
+            },
+            {
+              "week": 4,
+              "madrs": 11.3,
+              "bdi": 12.7
+            },
+            {
+              "week": 5,
+              "madrs": 11.6,
+              "bdi": 13.3
+            },
+            {
+              "week": 6,
+              "madrs": 9.2,
+              "bdi": 10.1
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 25.7,
+              "bdi": 20.9
+            },
+            {
+              "week": 1,
+              "madrs": 23.6,
+              "bdi": 19.8
+            },
+            {
+              "week": 2,
+              "madrs": 23.7,
+              "bdi": 19.7
+            },
+            {
+              "week": 3,
+              "madrs": 20.3,
+              "bdi": 20.8
+            },
+            {
+              "week": 4,
+              "madrs": 21.5,
+              "bdi": 18.6
+            },
+            {
+              "week": 5,
+              "madrs": 20.9,
+              "bdi": 21
+            },
+            {
+              "week": 6,
+              "madrs": 23.6,
+              "bdi": 20.2
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 26.2,
+              "bdi": 23.7
+            },
+            {
+              "week": 1,
+              "madrs": 25.7,
+              "bdi": 21
+            },
+            {
+              "week": 2,
+              "madrs": 25.4,
+              "bdi": 19.9
+            },
+            {
+              "week": 3,
+              "madrs": 23.4,
+              "bdi": 21.1
+            },
+            {
+              "week": 4,
+              "madrs": 24,
+              "bdi": 18.5
+            },
+            {
+              "week": 5,
+              "madrs": 23.6,
+              "bdi": 18.4
+            },
+            {
+              "week": 6,
+              "madrs": 24.8,
+              "bdi": 19.3
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 22.5,
+              "bdi": 25
+            },
+            {
+              "week": 1,
+              "madrs": 19.1,
+              "bdi": 19.8
+            },
+            {
+              "week": 2,
+              "madrs": 12.1,
+              "bdi": 14
+            },
+            {
+              "week": 3,
+              "madrs": 9.4,
+              "bdi": 9.9
+            },
+            {
+              "week": 4,
+              "madrs": 7.9,
+              "bdi": 9.7
+            },
+            {
+              "week": 5,
+              "madrs": 5.5,
+              "bdi": 8.5
+            },
+            {
+              "week": 6,
+              "madrs": 5.7,
+              "bdi": 6.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "itbs",
+      "label": "iTBS",
+      "longLabel": "Intermittent theta-burst stimulation, left DLPFC",
+      "arm": "THREE-D iTBS arm (Blumberger 2018; per-protocol)",
+      "rates": {
+        "responseRate": 0.49,
+        "remissionRate": 0.32,
+        "source": "measured",
+        "remissionSource": "measured",
+        "citationId": "three-d-blumberger-2018",
+        "definition": "Response = ≥50% reduction in HRSD-17; remission = HRSD-17 < 8. THREE-D iTBS arm, per-protocol among assessed (denom 193/209), 4–6-week endpoint."
+      },
+      "odds": {
+        "response": {
+          "or": 3.2,
+          "ciLow": 1.45,
+          "ciHigh": 7.08,
+          "citationId": "mutz-2019-nma"
+        }
+      },
+      "cohortSize": 40,
+      "summary": [
+        {
+          "week": 0,
+          "madrsMean": 30.5,
+          "madrsSd": 4.2,
+          "bdiMean": 31.1,
+          "bdiSd": 6.3
+        },
+        {
+          "week": 1,
+          "madrsMean": 24.7,
+          "madrsSd": 4.8,
+          "bdiMean": 25.3,
+          "bdiSd": 6.7
+        },
+        {
+          "week": 2,
+          "madrsMean": 20.7,
+          "madrsSd": 6.1,
+          "bdiMean": 21.1,
+          "bdiSd": 7.1
+        },
+        {
+          "week": 3,
+          "madrsMean": 18.5,
+          "madrsSd": 6.5,
+          "bdiMean": 19.5,
+          "bdiSd": 7.3
+        },
+        {
+          "week": 4,
+          "madrsMean": 17.2,
+          "madrsSd": 7.2,
+          "bdiMean": 17.9,
+          "bdiSd": 8.6
+        },
+        {
+          "week": 5,
+          "madrsMean": 16.3,
+          "madrsSd": 7.3,
+          "bdiMean": 16.9,
+          "bdiSd": 9.1
+        },
+        {
+          "week": 6,
+          "madrsMean": 15.7,
+          "madrsSd": 7.7,
+          "bdiMean": 16.3,
+          "bdiSd": 9.6
+        }
+      ],
+      "patients": [
+        {
+          "id": 0,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 31.7,
+              "bdi": 33.6
+            },
+            {
+              "week": 1,
+              "madrs": 28.9,
+              "bdi": 29.8
+            },
+            {
+              "week": 2,
+              "madrs": 26.5,
+              "bdi": 26.8
+            },
+            {
+              "week": 3,
+              "madrs": 27.6,
+              "bdi": 27.9
+            },
+            {
+              "week": 4,
+              "madrs": 26.1,
+              "bdi": 29.2
+            },
+            {
+              "week": 5,
+              "madrs": 26.5,
+              "bdi": 27.1
+            },
+            {
+              "week": 6,
+              "madrs": 24.8,
+              "bdi": 26.3
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 26.4,
+              "bdi": 39.3
+            },
+            {
+              "week": 1,
+              "madrs": 18.8,
+              "bdi": 31.1
+            },
+            {
+              "week": 2,
+              "madrs": 15.3,
+              "bdi": 24.7
+            },
+            {
+              "week": 3,
+              "madrs": 12.9,
+              "bdi": 23
+            },
+            {
+              "week": 4,
+              "madrs": 11.7,
+              "bdi": 20.3
+            },
+            {
+              "week": 5,
+              "madrs": 14.6,
+              "bdi": 18.8
+            },
+            {
+              "week": 6,
+              "madrs": 11.6,
+              "bdi": 20.2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 34.9,
+              "bdi": 30.9
+            },
+            {
+              "week": 1,
+              "madrs": 30.3,
+              "bdi": 29.8
+            },
+            {
+              "week": 2,
+              "madrs": 29.9,
+              "bdi": 30
+            },
+            {
+              "week": 3,
+              "madrs": 26.4,
+              "bdi": 25.2
+            },
+            {
+              "week": 4,
+              "madrs": 26.3,
+              "bdi": 25.7
+            },
+            {
+              "week": 5,
+              "madrs": 24.9,
+              "bdi": 27.5
+            },
+            {
+              "week": 6,
+              "madrs": 27.2,
+              "bdi": 27.3
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 31.2,
+              "bdi": 31.3
+            },
+            {
+              "week": 1,
+              "madrs": 30.6,
+              "bdi": 30.5
+            },
+            {
+              "week": 2,
+              "madrs": 26.8,
+              "bdi": 25.4
+            },
+            {
+              "week": 3,
+              "madrs": 28.5,
+              "bdi": 25.1
+            },
+            {
+              "week": 4,
+              "madrs": 25.9,
+              "bdi": 25.5
+            },
+            {
+              "week": 5,
+              "madrs": 25.8,
+              "bdi": 25.1
+            },
+            {
+              "week": 6,
+              "madrs": 27.1,
+              "bdi": 23
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 27.9,
+              "bdi": 26.5
+            },
+            {
+              "week": 1,
+              "madrs": 21.5,
+              "bdi": 22.9
+            },
+            {
+              "week": 2,
+              "madrs": 17.5,
+              "bdi": 19.4
+            },
+            {
+              "week": 3,
+              "madrs": 16.2,
+              "bdi": 16.7
+            },
+            {
+              "week": 4,
+              "madrs": 13.2,
+              "bdi": 13.6
+            },
+            {
+              "week": 5,
+              "madrs": 11.6,
+              "bdi": 14.9
+            },
+            {
+              "week": 6,
+              "madrs": 11,
+              "bdi": 10.9
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 22.3,
+              "bdi": 39.9
+            },
+            {
+              "week": 1,
+              "madrs": 22.8,
+              "bdi": 37
+            },
+            {
+              "week": 2,
+              "madrs": 21,
+              "bdi": 39
+            },
+            {
+              "week": 3,
+              "madrs": 21.2,
+              "bdi": 35.3
+            },
+            {
+              "week": 4,
+              "madrs": 21.6,
+              "bdi": 37.5
+            },
+            {
+              "week": 5,
+              "madrs": 20.4,
+              "bdi": 37.8
+            },
+            {
+              "week": 6,
+              "madrs": 22.1,
+              "bdi": 35.1
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 29.6,
+              "bdi": 31.4
+            },
+            {
+              "week": 1,
+              "madrs": 20.8,
+              "bdi": 22.5
+            },
+            {
+              "week": 2,
+              "madrs": 15.8,
+              "bdi": 17.5
+            },
+            {
+              "week": 3,
+              "madrs": 13.4,
+              "bdi": 15
+            },
+            {
+              "week": 4,
+              "madrs": 12.6,
+              "bdi": 13
+            },
+            {
+              "week": 5,
+              "madrs": 12.7,
+              "bdi": 11.3
+            },
+            {
+              "week": 6,
+              "madrs": 10.2,
+              "bdi": 10.7
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 23,
+              "bdi": 38.8
+            },
+            {
+              "week": 1,
+              "madrs": 19.5,
+              "bdi": 35.2
+            },
+            {
+              "week": 2,
+              "madrs": 18.8,
+              "bdi": 30.3
+            },
+            {
+              "week": 3,
+              "madrs": 14.9,
+              "bdi": 27.8
+            },
+            {
+              "week": 4,
+              "madrs": 13.9,
+              "bdi": 27.8
+            },
+            {
+              "week": 5,
+              "madrs": 12.5,
+              "bdi": 24.8
+            },
+            {
+              "week": 6,
+              "madrs": 11.2,
+              "bdi": 24.8
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 35.8,
+              "bdi": 19.1
+            },
+            {
+              "week": 1,
+              "madrs": 27,
+              "bdi": 15.6
+            },
+            {
+              "week": 2,
+              "madrs": 21.5,
+              "bdi": 10
+            },
+            {
+              "week": 3,
+              "madrs": 15.3,
+              "bdi": 7.2
+            },
+            {
+              "week": 4,
+              "madrs": 13.4,
+              "bdi": 8.8
+            },
+            {
+              "week": 5,
+              "madrs": 12.3,
+              "bdi": 6.4
+            },
+            {
+              "week": 6,
+              "madrs": 8.9,
+              "bdi": 3.9
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 34.1,
+              "bdi": 24.7
+            },
+            {
+              "week": 1,
+              "madrs": 24.7,
+              "bdi": 17.7
+            },
+            {
+              "week": 2,
+              "madrs": 18.7,
+              "bdi": 13.3
+            },
+            {
+              "week": 3,
+              "madrs": 17.8,
+              "bdi": 14.9
+            },
+            {
+              "week": 4,
+              "madrs": 16.9,
+              "bdi": 10.3
+            },
+            {
+              "week": 5,
+              "madrs": 13.2,
+              "bdi": 12.3
+            },
+            {
+              "week": 6,
+              "madrs": 15,
+              "bdi": 8.3
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 22.4,
+              "bdi": 41.9
+            },
+            {
+              "week": 1,
+              "madrs": 15.8,
+              "bdi": 28.8
+            },
+            {
+              "week": 2,
+              "madrs": 9.4,
+              "bdi": 23.5
+            },
+            {
+              "week": 3,
+              "madrs": 11.4,
+              "bdi": 17.6
+            },
+            {
+              "week": 4,
+              "madrs": 10.9,
+              "bdi": 16.8
+            },
+            {
+              "week": 5,
+              "madrs": 9.5,
+              "bdi": 17.2
+            },
+            {
+              "week": 6,
+              "madrs": 8.1,
+              "bdi": 15.7
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 32.5,
+              "bdi": 36.5
+            },
+            {
+              "week": 1,
+              "madrs": 29.5,
+              "bdi": 33
+            },
+            {
+              "week": 2,
+              "madrs": 27.5,
+              "bdi": 29.5
+            },
+            {
+              "week": 3,
+              "madrs": 24.5,
+              "bdi": 30.4
+            },
+            {
+              "week": 4,
+              "madrs": 23.9,
+              "bdi": 29.4
+            },
+            {
+              "week": 5,
+              "madrs": 21,
+              "bdi": 29.4
+            },
+            {
+              "week": 6,
+              "madrs": 22,
+              "bdi": 26.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1hz-lf-r",
+      "label": "1 Hz LF-R",
+      "longLabel": "Low-frequency 1 Hz rTMS, right DLPFC",
+      "arm": "Mutz 2019 LF-R odds ratio → sham baseline (OR-derived)",
+      "rates": {
+        "responseRate": 0.298,
+        "remissionRate": 0.161,
+        "source": "or-derived",
+        "remissionSource": "or-proxy",
+        "citationId": "mutz-2019-nma",
+        "definition": "OR-derived (no head-to-head trial measures 1 Hz LF-R directly): the Mutz LF-R response OR vs sham applied to the labeled sham baseline. Remission applies the SAME response OR to the sham remission baseline — an illustrative proxy, since Mutz reports no LF-R remission OR. Mutz per-trial response = ≥50% reduction (HDRS preferred)."
+      },
+      "odds": {
+        "response": {
+          "or": 3.65,
+          "ciLow": 2.13,
+          "ciHigh": 6.24,
+          "citationId": "mutz-2019-nma"
+        }
+      },
+      "cohortSize": 40,
+      "summary": [
+        {
+          "week": 0,
+          "madrsMean": 30.2,
+          "madrsSd": 4.2,
+          "bdiMean": 30.7,
+          "bdiSd": 7
+        },
+        {
+          "week": 1,
+          "madrsMean": 26.1,
+          "madrsSd": 4.6,
+          "bdiMean": 26.8,
+          "bdiSd": 7.5
+        },
+        {
+          "week": 2,
+          "madrsMean": 24,
+          "madrsSd": 5,
+          "bdiMean": 24.6,
+          "bdiSd": 7.2
+        },
+        {
+          "week": 3,
+          "madrsMean": 22.3,
+          "madrsSd": 5.6,
+          "bdiMean": 22.9,
+          "bdiSd": 7.8
+        },
+        {
+          "week": 4,
+          "madrsMean": 20.9,
+          "madrsSd": 6,
+          "bdiMean": 21.6,
+          "bdiSd": 7.9
+        },
+        {
+          "week": 5,
+          "madrsMean": 20.7,
+          "madrsSd": 6.2,
+          "bdiMean": 21.1,
+          "bdiSd": 8.2
+        },
+        {
+          "week": 6,
+          "madrsMean": 20.1,
+          "madrsSd": 6.2,
+          "bdiMean": 21.1,
+          "bdiSd": 7.9
+        }
+      ],
+      "patients": [
+        {
+          "id": 0,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 27.9,
+              "bdi": 31.6
+            },
+            {
+              "week": 1,
+              "madrs": 23.7,
+              "bdi": 28
+            },
+            {
+              "week": 2,
+              "madrs": 24.3,
+              "bdi": 25
+            },
+            {
+              "week": 3,
+              "madrs": 21.9,
+              "bdi": 21.1
+            },
+            {
+              "week": 4,
+              "madrs": 22.7,
+              "bdi": 17.6
+            },
+            {
+              "week": 5,
+              "madrs": 21.8,
+              "bdi": 19.4
+            },
+            {
+              "week": 6,
+              "madrs": 19.4,
+              "bdi": 20
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 22.8,
+              "bdi": 23.8
+            },
+            {
+              "week": 1,
+              "madrs": 15.6,
+              "bdi": 15.1
+            },
+            {
+              "week": 2,
+              "madrs": 15.1,
+              "bdi": 11.9
+            },
+            {
+              "week": 3,
+              "madrs": 11.6,
+              "bdi": 11.7
+            },
+            {
+              "week": 4,
+              "madrs": 10.3,
+              "bdi": 11
+            },
+            {
+              "week": 5,
+              "madrs": 10.1,
+              "bdi": 10
+            },
+            {
+              "week": 6,
+              "madrs": 10.4,
+              "bdi": 8.2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 30.7,
+              "bdi": 31.5
+            },
+            {
+              "week": 1,
+              "madrs": 25.1,
+              "bdi": 27.2
+            },
+            {
+              "week": 2,
+              "madrs": 25.8,
+              "bdi": 27
+            },
+            {
+              "week": 3,
+              "madrs": 23.7,
+              "bdi": 25
+            },
+            {
+              "week": 4,
+              "madrs": 25.4,
+              "bdi": 27.2
+            },
+            {
+              "week": 5,
+              "madrs": 23,
+              "bdi": 24.3
+            },
+            {
+              "week": 6,
+              "madrs": 24.3,
+              "bdi": 25.9
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responder": true,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 29.1,
+              "bdi": 20.9
+            },
+            {
+              "week": 1,
+              "madrs": 20.5,
+              "bdi": 16.7
+            },
+            {
+              "week": 2,
+              "madrs": 19,
+              "bdi": 16.3
+            },
+            {
+              "week": 3,
+              "madrs": 15.4,
+              "bdi": 15.5
+            },
+            {
+              "week": 4,
+              "madrs": 12.7,
+              "bdi": 16.3
+            },
+            {
+              "week": 5,
+              "madrs": 12.1,
+              "bdi": 13
+            },
+            {
+              "week": 6,
+              "madrs": 11.2,
+              "bdi": 14.9
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 26.5,
+              "bdi": 36.8
+            },
+            {
+              "week": 1,
+              "madrs": 24.4,
+              "bdi": 35
+            },
+            {
+              "week": 2,
+              "madrs": 22.8,
+              "bdi": 33.5
+            },
+            {
+              "week": 3,
+              "madrs": 23.9,
+              "bdi": 33.1
+            },
+            {
+              "week": 4,
+              "madrs": 20.5,
+              "bdi": 33.7
+            },
+            {
+              "week": 5,
+              "madrs": 23.8,
+              "bdi": 35.2
+            },
+            {
+              "week": 6,
+              "madrs": 19.7,
+              "bdi": 32.1
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 35.9,
+              "bdi": 32
+            },
+            {
+              "week": 1,
+              "madrs": 33.4,
+              "bdi": 30.6
+            },
+            {
+              "week": 2,
+              "madrs": 31.9,
+              "bdi": 26.4
+            },
+            {
+              "week": 3,
+              "madrs": 29.7,
+              "bdi": 27.6
+            },
+            {
+              "week": 4,
+              "madrs": 31.2,
+              "bdi": 26.9
+            },
+            {
+              "week": 5,
+              "madrs": 27.7,
+              "bdi": 27.1
+            },
+            {
+              "week": 6,
+              "madrs": 29.6,
+              "bdi": 25.4
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 30.4,
+              "bdi": 35.4
+            },
+            {
+              "week": 1,
+              "madrs": 26,
+              "bdi": 34.4
+            },
+            {
+              "week": 2,
+              "madrs": 23.7,
+              "bdi": 31.5
+            },
+            {
+              "week": 3,
+              "madrs": 21.5,
+              "bdi": 28
+            },
+            {
+              "week": 4,
+              "madrs": 21,
+              "bdi": 27.5
+            },
+            {
+              "week": 5,
+              "madrs": 20.5,
+              "bdi": 27.3
+            },
+            {
+              "week": 6,
+              "madrs": 19,
+              "bdi": 25.4
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "responder": true,
+          "remitter": true,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 27.6,
+              "bdi": 31.1
+            },
+            {
+              "week": 1,
+              "madrs": 19.1,
+              "bdi": 20.1
+            },
+            {
+              "week": 2,
+              "madrs": 12,
+              "bdi": 15.7
+            },
+            {
+              "week": 3,
+              "madrs": 9.3,
+              "bdi": 11
+            },
+            {
+              "week": 4,
+              "madrs": 7.9,
+              "bdi": 8.2
+            },
+            {
+              "week": 5,
+              "madrs": 5.2,
+              "bdi": 4.2
+            },
+            {
+              "week": 6,
+              "madrs": 4.9,
+              "bdi": 7.3
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 36,
+              "bdi": 21.3
+            },
+            {
+              "week": 1,
+              "madrs": 32.3,
+              "bdi": 18.3
+            },
+            {
+              "week": 2,
+              "madrs": 29.9,
+              "bdi": 18.1
+            },
+            {
+              "week": 3,
+              "madrs": 29.5,
+              "bdi": 19.6
+            },
+            {
+              "week": 4,
+              "madrs": 27.4,
+              "bdi": 20.3
+            },
+            {
+              "week": 5,
+              "madrs": 28.6,
+              "bdi": 19.9
+            },
+            {
+              "week": 6,
+              "madrs": 25.6,
+              "bdi": 21.3
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 28.7,
+              "bdi": 18
+            },
+            {
+              "week": 1,
+              "madrs": 25.1,
+              "bdi": 16.3
+            },
+            {
+              "week": 2,
+              "madrs": 24.4,
+              "bdi": 12.1
+            },
+            {
+              "week": 3,
+              "madrs": 22,
+              "bdi": 12.8
+            },
+            {
+              "week": 4,
+              "madrs": 17.7,
+              "bdi": 10.9
+            },
+            {
+              "week": 5,
+              "madrs": 20.9,
+              "bdi": 11.7
+            },
+            {
+              "week": 6,
+              "madrs": 18.7,
+              "bdi": 9
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 27.8,
+              "bdi": 33.1
+            },
+            {
+              "week": 1,
+              "madrs": 27.1,
+              "bdi": 29.4
+            },
+            {
+              "week": 2,
+              "madrs": 24.9,
+              "bdi": 29.1
+            },
+            {
+              "week": 3,
+              "madrs": 24,
+              "bdi": 27.3
+            },
+            {
+              "week": 4,
+              "madrs": 22.8,
+              "bdi": 25.6
+            },
+            {
+              "week": 5,
+              "madrs": 22.9,
+              "bdi": 26.7
+            },
+            {
+              "week": 6,
+              "madrs": 24.4,
+              "bdi": 24.4
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "responder": false,
+          "remitter": false,
+          "trajectory": [
+            {
+              "week": 0,
+              "madrs": 36.8,
+              "bdi": 32.9
+            },
+            {
+              "week": 1,
+              "madrs": 34.3,
+              "bdi": 29
+            },
+            {
+              "week": 2,
+              "madrs": 29.5,
+              "bdi": 25.8
+            },
+            {
+              "week": 3,
+              "madrs": 26.6,
+              "bdi": 24.9
+            },
+            {
+              "week": 4,
+              "madrs": 25.7,
+              "bdi": 23.6
+            },
+            {
+              "week": 5,
+              "madrs": 23.7,
+              "bdi": 19.4
+            },
+            {
+              "week": 6,
+              "madrs": 23.2,
+              "bdi": 19.2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

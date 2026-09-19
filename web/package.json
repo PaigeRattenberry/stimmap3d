@@ -1,0 +1,43 @@
+{
+  "name": "@stimmap3d/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "StimMap3D static front-end (Vite + React 19 + TypeScript). Deployable to Cloudflare Pages.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "d3-scale-chromatic": "^3.1.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "recharts": "^2.15.4",
+    "three": "^0.186.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/d3-scale-chromatic": "^3.1.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "axe-core": "^4.12.1",
+    "happy-dom": "^20.10.3",
+    "jsdom": "^30.0.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.0",
+    "vitest": "^4.1.9",
+    "vitest-axe": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

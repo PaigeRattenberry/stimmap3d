@@ -1,0 +1,16 @@
+# Tested with CPython 3.12.14 on Windows and Linux CI; includes transitive pins.
+# Author-time only. Use a virtual environment; see README.md.
+# Every pin below is imported by prep_meshes.py / generate_trials.py or required by one of them.
+fast-simplification==0.2.0
+imageio==2.37.4
+lazy-loader==0.5
+networkx==3.6.1
+nibabel==5.4.2
+numpy==2.5.3
+packaging==26.3
+pillow==12.3.0
+scikit-image==0.26.0
+scipy==1.18.1
+tifffile==2026.9.15
+trimesh==5.1.0
+typing-extensions==4.16.0

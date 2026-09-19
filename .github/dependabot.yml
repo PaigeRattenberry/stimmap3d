@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      three:
+        patterns: ['three', '@types/three', '@react-three/*']
+    ignore:
+      # M5 decision (CLAUDE.md, DESIGN.md): the AnalyticsPanel is built and locked on
+      # recharts 2.x. 3.x is a breaking major with no benefit for this panel.
+      - dependency-name: recharts
+        versions: ['>=3']
+      # @react-three/fiber declares peer react ">=19 <19.3" up to and including 9.7.0, its latest.
+      # React 19.3 therefore cannot dedupe against the R3F stack: npm installs a second copy and
+      # every hook reads a null dispatcher. Revisit when fiber widens the range.
+      - dependency-name: react
+        versions: ['>=19.3']
+      - dependency-name: react-dom
+        versions: ['>=19.3']
+      - dependency-name: '@types/react'
+        versions: ['>=19.3']
+      - dependency-name: '@types/react-dom'
+        versions: ['>=19.3']
+  - package-ecosystem: npm
+    directory: /tooling
+    schedule:
+      interval: weekly
+    groups:
+      # core/functions/extensions must move together or verify_meshes.mjs reads a split toolchain.
+      gltf-transform:
+        patterns: ['@gltf-transform/*']
+  - package-ecosystem: npm
+    directory: /tooling/video
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /tooling
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

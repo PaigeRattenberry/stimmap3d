@@ -1,0 +1,27 @@
+{
+  "name": "stimmap3d",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Educational 3D rTMS coil-targeting and induced E-field visualizer (illustrative, not for clinical use).",
+  "license": "MIT",
+  "workspaces": [
+    "web"
+  ],
+  "comment:overrides": "Keep the patched esbuild floor for any optional installation. Vite 8 currently uses Rolldown and the installed locked tree has no esbuild. check:toolchain validates installed copies; npm audit covers the full tree.",
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
+  "comment:tooling": "tooling/ is author-time Python (see tooling/README.md). It is intentionally NOT an npm workspace and never runs on the live path.",
+  "scripts": {
+    "dev": "npm run dev --workspace web",
+    "build": "npm run build --workspace web",
+    "preview": "npm run preview --workspace web",
+    "test": "npm run test --workspace web",
+    "release:check": "node scripts/release-check.mjs",
+    "test:browser": "node tooling/video/release-smoke.mjs",
+    "check:toolchain": "node --test scripts/esbuild-policy.test.mjs && node scripts/check-toolchain.mjs"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

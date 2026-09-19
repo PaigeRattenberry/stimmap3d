@@ -1,0 +1,24 @@
+{
+  "name": "stimmap3d-tooling",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Author-time mesh, synthetic-data and image generators for StimMap3D; outside the browser runtime.",
+  "scripts": {
+    "prep-meshes": "node prep_meshes.mjs",
+    "generate-trials": "node generate_trials.mjs",
+    "make-og-image": "node make_og_image.mjs"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "^4.5.0",
+    "@gltf-transform/extensions": "^4.5.0",
+    "@gltf-transform/functions": "^4.5.0",
+    "isosurface": "^1.0.0",
+    "meshoptimizer": "^1.2.0",
+    "nifti-reader-js": "^0.8.0",
+    "sharp": "^0.35.4"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

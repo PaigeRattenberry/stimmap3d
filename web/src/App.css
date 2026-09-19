@@ -1,0 +1,2378 @@
+/* ---- Disclaimer banner (persistent, every view) ---- */
+.disclaimer-banner {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.55rem 1rem;
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  border-bottom: 1px solid var(--warn-border);
+  font-size: 0.85rem;
+}
+
+/* Pin the gate-(a) disclaimer to the top so "not for clinical use" stays on-screen as the page
+   scrolls — realising the guided tour's stated intent (its translucent scrim keeps the pinned
+   banner legible: see GuidedTour.tsx / the tour-overlay note below). The STICKY lives on the
+   App-level wrapper (not `.disclaimer-banner` itself) because a sticky element only stays pinned
+   within its parent's box: the wrapper's parent is the full-height #root, so it sticks for the whole
+   scroll, whereas the banner's own wrapper is only banner-height and would scroll straight off.
+   z-index stays UNDER the tour scrim (z-index:1000) so the scrim still dims it uniformly during the
+   tour, as designed.
+
+   POINTER-TRANSPARENT. Once pinned, the banner floats over whatever scrolls beneath it — including
+   the top strip of the WebGL `.scene-stage`. An opaque, hit-testable bar there would silently
+   SWALLOW pointerdown, so a coil drag or an orbit started in that strip would do nothing at all. The
+   banner carries no interactive content (an icon + a paragraph, `role="alert"`), so it gives up hit
+   testing entirely and every press falls through to the scene/controls underneath. The only cost is
+   that its prose can't be selected while pinned — the same sentences are selectable on the Methods
+   page and in the print one-pager — and `user-select: none` makes that honest rather than a drag
+   that mysteriously selects nothing. */
+.app-disclaimer {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Because the banner is now pinned, browser-initiated "reveal" scrolls (keyboard focus, find-in-page,
+   anchor jumps) must land BELOW it or the revealed element hides under the banner. scroll-padding-top
+   reserves the banner's height at the top of every scroll into view — its MEASURED height, published
+   as `--disclaimer-h` by App.tsx's ResizeObserver, because that height is not a constant: the
+   ~330-character gate-(a) prose wraps from one line on a wide desktop to ~7 lines (~150px) on a 375px
+   phone. Any hard-coded reserve (this was `5rem`) therefore under-reserves on narrow viewports, and a
+   keyboard user tabbing to a control still lands hidden behind the banner (WCAG 2.4.11
+   focus-not-obscured). The literal survives as the var() fallback for the first paint. */
+html {
+  scroll-padding-top: calc(var(--disclaimer-h, 5rem) + 0.5rem);
+}
+
+.disclaimer-banner__icon {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.disclaimer-banner__text {
+  margin: 0;
+  max-width: 90ch;
+}
+
+.disclaimer-banner strong {
+  color: #fff;
+}
+
+/* ---- Header / nav ---- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header__brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.app-header__nav a {
+  color: var(--fg-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.app-header__nav a:hover,
+.app-header__nav a[aria-current='page'] {
+  color: var(--fg);
+}
+
+.app-header__nav a[aria-current='page'] {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+}
+
+/* ---- Main layout ---- */
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+
+/* ---- First-run onboarding card (M6 polish; additive to the persistent banner) ---- */
+.first-run-card {
+  position: relative;
+  margin: 0 0 1.5rem;
+  padding: 1rem 2.4rem 1.05rem 1.15rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(91, 140, 255, 0.14), transparent 60%),
+    var(--bg-elev);
+}
+
+.first-run-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.first-run-card__list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.first-run-card__note {
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.first-run-card__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.first-run-card__close:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+/* ---- Load/error states (M6 polish) ---- */
+.stage-error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 0.4rem;
+  padding: 2rem;
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.stage-error__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.panel-error {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1.25rem 1.3rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--fg-muted);
+}
+
+/* ---- Visualizer / 3D scene ---- */
+.visualizer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+/* Wide screens: scene over the depth–dose card in the left column; the control panel spans both on
+   the right. The card lives UNDER the head (the field it describes) and fills the space the tall
+   control panel would otherwise leave empty on the left — and it scrolls normally (never sticky). */
+@media (min-width: 980px) {
+  .visualizer {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 28vw, 360px);
+    align-items: start;
+  }
+  .scene-stage {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .field-metrics-card {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .control-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .method-explainers {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+  .analytics-panel {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+  /* The depth–dose HUD is a wide-screen enhancement; on narrow viewports the under-scene card is
+     the baseline (and the scene is too small to overlay without crowding). The descendant selector
+     out-specifies the base `.field-metrics-hud { display: none }` regardless of source order. */
+  .scene-stage .field-metrics-hud {
+    display: block;
+  }
+}
+
+.scene-stage {
+  position: relative;
+  height: clamp(440px, 70vh, 760px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 50% 0%, rgba(91, 140, 255, 0.1), transparent 60%),
+    var(--bg-elev);
+  touch-action: none; /* let OrbitControls own touch gestures */
+}
+
+.scene-stage canvas {
+  display: block;
+  outline: none;
+}
+
+.scene-stage__caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  margin: 0;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  background: linear-gradient(to top, rgba(11, 16, 33, 0.88), rgba(11, 16, 33, 0));
+  pointer-events: none;
+}
+
+/* ---- E-field colour scale legend (honesty gate (e): relative units) ---- */
+.color-scale {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  width: 192px;
+  padding: 0.6rem 0.7rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(13, 18, 38, 0.82);
+  backdrop-filter: blur(6px);
+  color: var(--fg);
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+
+.color-scale__title {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.4rem;
+}
+
+.color-scale__bar {
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.color-scale__ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  color: var(--fg-muted);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.color-scale__note {
+  margin: 0.4rem 0 0;
+  color: var(--fg-muted);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
+.color-scale__note strong {
+  color: var(--warn-fg, #ffd479);
+}
+
+/* ---- Depth–dose HUD (v1.1): compact live gauge pinned to the scene top-right. Mirrors the colour
+   legend's overlay style. The detailed FieldMetricsCard under the scene stays the annotated source;
+   this is the glance copy so the numbers stay visible while a slider is dragged. Default hidden —
+   shown only on wide screens (media query below); on narrow the card under the scene is the baseline. */
+.field-metrics-hud {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: none;
+  min-width: 132px;
+  padding: 0.5rem 0.6rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(13, 18, 38, 0.82);
+  backdrop-filter: blur(6px);
+  color: var(--fg);
+  pointer-events: none;
+}
+
+.field-metrics-hud__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.55rem;
+  margin-bottom: 0.4rem;
+}
+
+.field-metrics-hud__title {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.field-metrics-hud__tag {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--warn-fg, #ffd9a8);
+  white-space: nowrap;
+}
+
+.field-metrics-hud__rows {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.field-metrics-hud__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.field-metrics-hud__key {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--accent-warm);
+}
+
+.field-metrics-hud__val {
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* ---- Methods & Limitations page ---- */
+.methods {
+  max-width: 80ch;
+}
+
+.methods__back {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.methods h1 {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+}
+
+.methods__lede {
+  color: var(--fg-muted);
+  font-size: 1.02rem;
+}
+
+.methods h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.methods__oneliner {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-elev);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--fg);
+}
+
+.methods__limitations {
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.methods__limitations li {
+  color: var(--fg);
+}
+
+.methods__units-note {
+  padding: 0.85rem 1rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+}
+
+/* ---- #23 Spherical-approximation derivation figure ---- */
+.derivation__equation {
+  margin: 0.6rem 0;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-elev);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+}
+
+.derivation__nowrap {
+  white-space: nowrap;
+}
+
+.derivation-figure {
+  margin: 1.25rem 0;
+}
+
+.derivation-svg {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 120% at 50% 0%, rgba(91, 140, 255, 0.08), transparent 60%),
+    var(--bg-elev);
+}
+
+.derivation-svg__label {
+  font: 600 12px/1.2 system-ui, sans-serif;
+  fill: var(--fg);
+}
+
+.derivation-svg__label--muted {
+  fill: var(--fg-muted);
+  font-weight: 400;
+}
+
+.derivation-svg__label--accent {
+  fill: var(--accent);
+}
+
+.derivation-svg__label--warn {
+  fill: var(--warn-fg, #ffd479);
+}
+
+.derivation-figure__caption {
+  margin: 0.7rem auto 0;
+  max-width: 620px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.derivation-figure__caption code,
+.derivation__steps code {
+  white-space: nowrap;
+}
+
+.derivation__steps {
+  padding-left: 1.4rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.derivation__steps li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ---- #21 Self-check quiz (retrieval practice on the honesty gates) ---- */
+.self-check {
+  margin-top: 2rem;
+  padding: 1.1rem 1.2rem 1.25rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--bg-elev);
+}
+
+.self-check__form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.self-check__q {
+  margin: 0;
+  padding: 0.85rem 1rem 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.self-check__legend {
+  padding: 0 0.35rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.self-check__num {
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.self-check__gate {
+  display: inline-block;
+  margin-right: 0.35rem;
+  padding: 0.04rem 0.4rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.self-check__option {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+}
+
+.self-check__option input[type='radio'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.self-check__option label {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--fg);
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.self-check__verdict {
+  margin: 0.7rem 0 0;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  border-radius: 8px;
+}
+
+.self-check__verdict--ok {
+  color: #b8f0d6;
+  background: rgba(64, 200, 140, 0.12);
+  border: 1px solid #2f8f63;
+}
+
+.self-check__verdict--no {
+  color: var(--warn-fg, #ffd9a8);
+  background: rgba(201, 119, 43, 0.14);
+  border: 1px solid var(--warn-border);
+}
+
+.self-check__actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.self-check__btn {
+  padding: 0.45rem 0.95rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.self-check__btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.self-check__btn--primary {
+  color: #0b1021;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.self-check__btn--primary:hover:not(:disabled) {
+  background: #6f9bff;
+}
+
+.self-check__btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.self-check__score {
+  margin: 0.85rem 0 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+/* ---- Control panel (M4: presets + intensity + colormap + stand-off) ---- */
+.control-panel {
+  display: grid;
+  gap: 1.15rem;
+  align-content: start;
+  padding: 1.1rem 1.15rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(91, 140, 255, 0.08), transparent 55%),
+    var(--bg-elev);
+}
+
+.control-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.control-group__title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.control-group__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.control-value {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* Preset buttons: a responsive grid of one-click placements. */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.preset-btn {
+  padding: 0.5rem 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.06s ease;
+}
+
+.preset-btn:hover {
+  border-color: var(--accent);
+  background: #232c4d;
+}
+
+.preset-btn:active {
+  transform: translateY(1px);
+}
+
+.preset-btn--active {
+  color: #0b1021;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.preset-btn--active:hover {
+  background: #6f9bff;
+}
+
+.control-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+.control-hint--muted {
+  color: var(--fg-muted);
+}
+
+.control-hint a {
+  white-space: nowrap;
+}
+
+/* Segmented toggle (colormap). */
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.segmented__btn {
+  padding: 0.45rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  background: var(--bg-elev-2);
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.segmented__btn:last-child {
+  border-right: none;
+}
+
+.segmented__btn:hover {
+  color: var(--fg);
+}
+
+.segmented__btn--active {
+  color: #0b1021;
+  background: var(--accent);
+}
+
+/* Range sliders, themed to the dark palette. */
+.control-panel input[type='range'] {
+  width: 100%;
+  height: 4px;
+  margin: 0.15rem 0 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, var(--accent), #2a3358);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.control-panel input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fg);
+  border: 2px solid var(--accent);
+  cursor: pointer;
+}
+
+.control-panel input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fg);
+  border: 2px solid var(--accent);
+  cursor: pointer;
+}
+
+.control-reset {
+  justify-self: start;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.control-reset:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+/* Checkbox toggle (targeting-debate overlay, M6). */
+.control-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.86rem;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.control-toggle input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ---- Depth–dose readout card (v1.1: HVD / focal spread) ---- */
+.field-metrics-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.7rem;
+  align-content: start;
+  padding: 1.1rem 1.15rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 180, 84, 0.08), transparent 55%),
+    var(--bg-elev);
+}
+
+.field-metrics-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.field-metrics-card__title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.field-metrics-card__badge {
+  padding: 0.12rem 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #ffd9a8;
+  background: rgba(201, 119, 43, 0.18);
+  border: 1px solid var(--warn-border);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.field-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.field-metric {
+  display: grid;
+  gap: 0.15rem;
+  align-content: start;
+  padding: 0.55rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elev-2);
+  text-align: center;
+}
+
+.field-metric__label {
+  font-size: 0.66rem;
+  line-height: 1.25;
+  color: var(--fg-muted);
+}
+
+.field-metric__label em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--accent-warm);
+}
+
+.field-metric__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+.field-metric__sub {
+  font-size: 0.6rem;
+  line-height: 1.2;
+  color: var(--fg-muted);
+}
+
+.field-metrics-card__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+.field-metrics-card__caveat {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+
+.field-metrics-card__caveat strong {
+  color: var(--warn-fg, #ffd479);
+}
+
+.field-metrics-card__sources {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
+/* Live F3↔connectivity gap line in the method-explainers (M6-4 — replaces the static ~6 mm). */
+.method-explainers__gap {
+  margin: -0.1rem 0 0.2rem;
+  max-width: 80ch;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.method-explainers__gap-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  border: 1px solid var(--warn-border);
+  border-radius: 4px;
+  padding: 0.04rem 0.35rem;
+  vertical-align: middle;
+}
+
+/* In-scene overlay labels for the targeting-debate markers + distance (drei <Html>). */
+.target-compare__label {
+  padding: 0.3rem 0.55rem;
+  background: rgba(13, 18, 38, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--fg);
+  font: 600 0.78rem/1.25 system-ui, sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.target-compare__sub {
+  display: block;
+  margin-top: 0.1rem;
+  font-weight: 400;
+  font-size: 0.66rem;
+  color: var(--fg-muted);
+}
+
+.target-compare__tag {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  background: rgba(13, 18, 38, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: 700 0.68rem/1.2 system-ui, sans-serif;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ---- Targeting-legibility markers (V2-1: 10-20 dots + DLPFC→sgACC cue) ---- */
+.electrode-tag {
+  display: inline-block;
+  padding: 0.08rem 0.36rem;
+  background: rgba(13, 18, 38, 0.88);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: 700 0.64rem/1.2 system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Dashed border + muted sub-line = "this is a schematic note, not a measurement". */
+.cue-caption {
+  display: inline-block;
+  max-width: 11rem;
+  padding: 0.2rem 0.44rem;
+  background: rgba(13, 18, 38, 0.92);
+  border: 1px dashed var(--border);
+  border-radius: 7px;
+  color: var(--fg);
+  font: 600 0.62rem/1.25 system-ui, sans-serif;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cue-caption__sub {
+  display: block;
+  margin-top: 0.12rem;
+  font-weight: 400;
+  font-size: 0.56rem;
+  color: var(--fg-muted);
+}
+
+/* ---- Targeting-method explainer cards (M4) ---- */
+.method-explainers {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.method-explainers__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.method-explainers__lede {
+  margin: -0.3rem 0 0.2rem;
+  max-width: 80ch;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.method-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.method-card {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.method-card--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 6px 22px rgba(91, 140, 255, 0.16);
+}
+
+.method-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.method-card__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.method-card__badge {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.method-card__badge--deprecated {
+  color: #ffd9a8;
+  background: rgba(201, 119, 43, 0.18);
+  border: 1px solid var(--warn-border);
+}
+
+.method-card__badge--heuristic {
+  color: #cfe0ff;
+  background: rgba(91, 140, 255, 0.16);
+  border: 1px solid var(--accent);
+}
+
+.method-card__badge--connectivity {
+  color: #b8f0d6;
+  background: rgba(64, 200, 140, 0.16);
+  border: 1px solid #2f8f63;
+}
+
+.method-card__body {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.method-card__sources {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  line-height: 1.4;
+}
+
+/* ---- Dose–response analytics panel (M5) ---- */
+.analytics-panel {
+  display: grid;
+  gap: 1.15rem;
+  padding: 1.25rem 1.3rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(130% 90% at 100% 0%, rgba(180, 140, 255, 0.07), transparent 55%),
+    var(--bg-elev);
+}
+
+.analytics-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.analytics-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.3rem;
+  font-size: 1.15rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.analytics-panel__lede {
+  margin: 0;
+  max-width: 92ch;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.analytics-panel__foot {
+  margin: 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.analytics-panel__foot .analytics-badge {
+  vertical-align: middle;
+}
+
+/* Badges — reuse the method-card badge language. */
+.analytics-badge {
+  padding: 0.12rem 0.5rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.analytics-badge--synthetic {
+  color: #ffd9a8;
+  background: rgba(201, 119, 43, 0.18);
+  border: 1px solid var(--warn-border);
+}
+
+.analytics-badge--derived {
+  color: #e0cfff;
+  background: rgba(180, 140, 255, 0.16);
+  border: 1px solid #6f55b0;
+}
+
+.analytics-badge--experimental {
+  color: #ffd9a8;
+  background: rgba(201, 119, 43, 0.16);
+  border: 1px solid var(--warn-border);
+}
+
+/* Neutral "illustrative / qualitative" badge — no measured claim (V2-7a C5 tolerability cue). */
+.analytics-badge--illustrative {
+  color: var(--fg-muted);
+  background: rgba(120, 134, 176, 0.14);
+  border: 1px solid var(--border);
+}
+
+/* Quarantined accelerated-protocol callout (SNT/SAINT). */
+.analytics-note {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--warn-border);
+  border-radius: var(--radius);
+  background: rgba(58, 36, 18, 0.32);
+}
+
+.analytics-note__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.analytics-note__title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.analytics-note__body {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+/* Extended-callout sub-block (V2-7a C3): the SAINT/SNT targeting + schedule story, ruled off from
+   the rates paragraph above but still inside the quarantined callout. */
+.analytics-note__sub {
+  display: grid;
+  gap: 0.3rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--warn-border);
+}
+
+.analytics-note__subtitle {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+/* Qualitative tolerability cue (V2-7a C5) — a nested, neutrally-bordered aside so it never reads as
+   a measured rate. */
+.analytics-note__cue {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(28, 36, 64, 0.5);
+}
+
+.analytics-note__cue-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+/* On-screen definitions strip (gate (c)/(d) honesty: defined where the numbers live). */
+.analytics-defs {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--bg-elev-2);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.analytics-defs__term {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Two side-by-side analytic cards (absolute % vs odds ratio) — the DESIGN §4 axis separation. */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+}
+
+@media (min-width: 720px) {
+  .analytics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.analytics-card {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  padding: 1rem 1.05rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.analytics-card--wide {
+  grid-column: 1 / -1;
+}
+
+.analytics-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.analytics-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.analytics-card__tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.analytics-card__lede {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.analytics-card__foot {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.analytics-chart {
+  width: 100%;
+}
+
+/* Inline chart legend. */
+.analytics-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.74rem;
+  color: var(--fg-muted);
+}
+
+.analytics-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.analytics-legend .swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* Hatched legend swatch marking OR-derived (vs sham) bars. */
+.analytics-legend .swatch--hatch {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--accent) 0,
+      var(--accent) 2px,
+      rgba(91, 140, 255, 0.25) 2px,
+      rgba(91, 140, 255, 0.25) 4px
+    );
+  border: 1px solid var(--border);
+}
+
+/* Round dot swatch for the per-patient population-scatter halos (V2-7a C4). */
+.analytics-legend .swatch--dot {
+  border-radius: 999px;
+}
+
+/* ±1 SD band swatch — the fill is driven inline from the C.band constant (the same single source the
+   Area mark uses) so the legend can never drift from what's drawn; only the warn border, which ties
+   it to the synthetic palette, lives here (V2-7a #39). */
+.analytics-legend .swatch--band {
+  border: 1px solid var(--warn-border);
+}
+
+/* OR → probability conversion callout (explicit + sourced, DESIGN §4). */
+.analytics-conversion {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev-2);
+}
+
+.analytics-conversion__title {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.analytics-conversion__formula,
+.analytics-conversion__result {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.analytics-conversion__formula code {
+  font-size: 0.74rem;
+}
+
+.analytics-conversion__note {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+
+/* Numbered OR→probability walkthrough (#17) — the formula made auditable, step by step. */
+.analytics-walkthrough {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+.analytics-walkthrough li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.analytics-walkthrough__step {
+  font-weight: 700;
+  color: var(--fg-muted);
+}
+
+/* Natural-frequency icon array (#17) — two "N of 100" waffles (OR-derived vs sham). */
+.analytics-natfreq {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev-2);
+}
+
+.analytics-natfreq .analytics-badge {
+  vertical-align: middle;
+}
+
+.natfreq-array {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
+.natfreq {
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+  justify-items: start;
+  flex: 1 1 160px;
+}
+
+.natfreq__label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--fg-muted);
+}
+
+.natfreq__grid {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.natfreq__caption {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--fg-muted);
+}
+
+.citation-link {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 0.82em;
+}
+
+/* Per-protocol exact definition (the cited scale + cutoff for the selected protocol). */
+.analytics-card__def {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+
+/* Compact segmented toggle (trajectory scale). */
+.segmented--mini {
+  width: max-content;
+}
+
+.segmented--mini .segmented__btn {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.76rem;
+}
+
+/* Custom trajectory tooltip (mean only). */
+.analytics-tooltip {
+  padding: 0.45rem 0.6rem;
+  background: #141a30;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--fg);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.analytics-tooltip__label {
+  color: var(--fg-muted);
+  margin-bottom: 0.15rem;
+}
+
+/* Recharts surface tweaks for the dark theme. */
+.analytics-chart .recharts-cartesian-axis-line,
+.analytics-chart .recharts-cartesian-axis-tick-line {
+  stroke: var(--border);
+}
+
+/* ---- Provenance ledger browser (M6: #/sources) ---- */
+.sources {
+  max-width: 88ch;
+}
+
+.sources__back {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.sources h1 {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+}
+
+.sources__lede {
+  color: var(--fg-muted);
+  font-size: 1rem;
+  max-width: 80ch;
+}
+
+.sources__lede time {
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.sources__group {
+  margin-top: 2rem;
+}
+
+.sources__group-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0 0 0.2rem;
+  font-size: 1.25rem;
+}
+
+.sources__count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--fg-muted);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+}
+
+.sources__group-blurb {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+.sources__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.sources__entry {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.95rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+
+.sources__entry-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sources__entry-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.sources__license {
+  flex: none;
+  padding: 0.12rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+
+.sources__license--asset {
+  color: #cfe0ff;
+  background: rgba(91, 140, 255, 0.16);
+  border-color: var(--accent);
+}
+
+.sources__license--number {
+  color: #b8f0d6;
+  background: rgba(64, 200, 140, 0.14);
+  border-color: #2f8f63;
+}
+
+.sources__license--software {
+  color: #ffd9a8;
+  background: rgba(201, 119, 43, 0.18);
+  border-color: var(--warn-border);
+}
+
+.sources__use {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg);
+}
+
+.sources__use-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.02rem 0.3rem;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.sources__source {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.sources__notes {
+  margin: 0.1rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--border);
+}
+
+/* Verbatim redistribution notice (BSD-2 / ICBM152) for assets served by the site. Collapsed by
+   default so the ledger stays scannable; the full text is still in the DOM (page source, find-in-page,
+   assistive tech). A collapsed <details> does not print its body — moot, since the print stylesheet
+   shows only the one-pager and never prints this page. */
+.sources__notice {
+  margin: 0.1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.sources__notice summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.sources__notice-text {
+  margin: 0.4rem 0 0;
+  padding: 0.6rem 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: inherit;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* ---- Guided-tour CTA (V2-4a, #7) ---- */
+.tour-cta-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.25rem;
+}
+
+.tour-cta {
+  flex: none;
+  padding: 0.5rem 1.05rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: #0b1021;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.06s ease;
+}
+
+.tour-cta:hover {
+  background: #6f9bff;
+}
+
+.tour-cta:active {
+  transform: translateY(1px);
+}
+
+.tour-cta-bar__hint {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+
+/* ---- Share toolbar (V2-4b, #18 deep-link + #19 PNG export) ---- */
+.share-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.25rem;
+}
+
+.share-btn {
+  flex: none;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-elev-2, #161d33);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease;
+}
+
+.share-btn:hover {
+  background: #1e2843;
+  border-color: var(--accent);
+}
+
+.share-btn:active {
+  transform: translateY(1px);
+}
+
+.share-bar__status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  min-height: 1em;
+}
+
+.share-bar__hint {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+
+/* ---- Guided-tour overlay: translucent scrim (banner stays legible — gate (a)) + anchor ring + card ---- */
+.guided-tour {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.guided-tour__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 20, 0.5);
+  pointer-events: auto; /* swallow stray clicks so a beat's state isn't disturbed mid-tour */
+}
+
+/* Portaled to <body> and absolutely positioned in PAGE coordinates (see GuidedTour.tsx); its own
+   z-index keeps it above the scrim (which lives in the z-index:1000 .guided-tour stacking context). */
+.guided-tour__ring {
+  position: absolute;
+  z-index: 1001;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  background: rgba(91, 140, 255, 0.06);
+  box-shadow:
+    0 0 0 2px rgba(91, 140, 255, 0.35),
+    0 0 24px 6px rgba(91, 140, 255, 0.45);
+  pointer-events: none;
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+
+/* Snap instead of glide. Applied for reduced motion (#27) — the global prefers-reduced-motion rule in
+   index.css also neutralises the transition, but the modifier makes it explicit and survives the ring
+   being portaled out of the .guided-tour subtree — AND for every scroll/resize-driven re-measure,
+   where the ring is CORRECTING its box rather than travelling between beats: the sticky disclaimer
+   banner's page coordinates move with scrollY, so an animated correction would leave the spotlight
+   trailing a quarter-second behind the thing it is spotlighting (see GuidedTour.tsx `trackAnchor`). */
+.guided-tour__ring--reduced {
+  transition: none;
+}
+
+.guided-tour__card {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(1rem, 4vh, 2.5rem);
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 2rem));
+  padding: 1.05rem 1.2rem 1.1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(91, 140, 255, 0.16), transparent 60%),
+    var(--bg-elev);
+  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.5);
+  color: var(--fg);
+  pointer-events: auto;
+  outline: none;
+}
+
+.guided-tour__progress {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.guided-tour__title {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.guided-tour__body {
+  margin: 0 0 0.9rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.guided-tour__body strong {
+  color: #fff;
+}
+
+.guided-tour__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.guided-tour__nav {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.guided-tour__skip {
+  padding: 0.4rem 0.2rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.guided-tour__skip:hover {
+  color: var(--fg);
+}
+
+.guided-tour__btn {
+  padding: 0.45rem 0.95rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.guided-tour__btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.guided-tour__btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.guided-tour__btn--primary {
+  color: #0b1021;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.guided-tour__btn--primary:hover {
+  background: #6f9bff;
+}
+
+/* ---- Footer ---- */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: 0.82rem;
+}
+
+.app-footer__links {
+  display: inline-flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.app-footer a {
+  text-decoration: none;
+}
+
+/* ---- Small screens (M6 polish): tighten chrome + shrink the scene stage ---- */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1.25rem 0.9rem;
+  }
+
+  .app-header {
+    padding: 0.6rem 0.9rem;
+  }
+
+  .app-header__nav {
+    gap: 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .disclaimer-banner {
+    font-size: 0.8rem;
+  }
+
+  .scene-stage {
+    height: clamp(300px, 54vh, 460px);
+  }
+
+  .methods h1,
+  .sources h1 {
+    font-size: 1.6rem;
+  }
+
+  .method-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .sources__entry-head {
+    gap: 0.4rem;
+  }
+
+  .app-footer {
+    padding: 0.85rem 0.9rem;
+  }
+}
+
+/* ============================================================================
+   V2-5 — Accessibility floor, OUTPUT half (#34 live region, #22 glossary).
+   The input-half a11y CSS (#15 keyboard coil, #32 radiogroup focus) follows below.
+   ============================================================================ */
+
+/* Visually-hidden but available to assistive tech (the #34 SR live region). Standard clip pattern. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- #22 Glossary term + accessible tooltip ---- */
+.term-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.term {
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--accent);
+}
+
+.term:hover {
+  text-decoration-style: solid;
+}
+
+.term:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.term__tip {
+  display: none;
+  position: fixed;
+  box-sizing: border-box;
+  /* Above ordinary page content, but deliberately BELOW the sticky disclaimer banner (z-index:50): a
+     transient, upward-opening glossary tooltip must never paint over the gate-(a) "not for clinical
+     use" line, which would leave the banner on-screen but not visible — the exact thing pinning it is
+     meant to guarantee. A tooltip on a term in the first row under the banner is clipped by it
+     instead; the term itself stays readable and the tooltip reopens fully after a small scroll. */
+  z-index: 40;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 16px));
+  overflow-wrap: anywhere;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 0.74rem;
+  font-weight: 400;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  /* Hidden by default but kept in the DOM so the trigger's `aria-describedby` always resolves. */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.1s ease,
+    visibility 0.1s ease;
+  pointer-events: none;
+}
+
+.term__tip--open {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term__tip {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   V2-5 — Accessibility floor, INPUT half (#15 keyboard coil, #32 radiogroup).
+   ============================================================================ */
+
+/* #32 Preset radiogroup: a visible focus ring for the roving radios (WCAG 2.4.7). The radio still uses
+   `.preset-btn`; on the (accent-filled) active radio a white ring reads clearly against the blue. */
+.preset-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* #15 Keyboard coil control: a focusable affordance that drives the coil from the keyboard. */
+.coil-kbd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.85rem;
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--fg-muted);
+  font-size: 0.76rem;
+  cursor: default;
+}
+
+.coil-kbd:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.coil-kbd__title {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.coil-kbd__keys {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.coil-kbd__key {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 0.72rem;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.coil-kbd__hint {
+  flex: 1 1 16rem;
+  color: var(--fg-muted);
+}
+
+/* ============================================================================
+   C6 — Printable clinician one-pager (V2-7b). The <PrintSummary> block is hidden
+   on screen and revealed ONLY inside @media print, where the interactive chrome
+   is hidden so the printout is a clean config + methods + provenance handout —
+   with the disclaimer + "synthetic" badge + relative-units label baked in
+   (load-bearing gates (a)/(d)/(e); the on-screen banner does not print).
+   ============================================================================ */
+.print-summary {
+  display: none;
+}
+
+@media print {
+  /* Guarantee a print margin so the one-pager never runs to the paper edge, whatever the browser's
+     default print settings are. */
+  @page {
+    margin: 0.6in;
+  }
+
+  /* Hide the on-screen app: the WebGL scene can't print reliably and the chrome isn't a handout.
+     Safe because the one-pager below carries its OWN baked-in disclaimer (gate (a) survives).
+
+     ALLOWLIST, not a per-selector denylist: hide everything and reveal ONLY .print-summary. A
+     denylist (naming .app-header/.app-main/…) leaked new top-level UI and anything portaled to
+     <body> — e.g. the guided-tour ring, which createPortal()s to document.body and escaped the
+     .app-main rule. This stays correct as UI is added:
+       • body > *:not(#root)   → portaled siblings of #root (tour ring, future modals/toasts)
+       • #root > *:not(.print-summary) → the on-screen app chrome (banner, header, main, footer)
+     (.print-summary is rendered as the first child of #root — see App.tsx — so it survives.) */
+  body > *:not(#root),
+  #root > *:not(.print-summary) {
+    display: none !important;
+  }
+
+  html,
+  body,
+  #root {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Reveal the one-pager with an ink-friendly light palette. */
+  .print-summary {
+    display: block !important;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+
+  .print-summary__title {
+    margin: 0 0 0.5rem;
+    font-size: 15pt;
+    color: #000;
+  }
+
+  /* The disclaimer is boxed and break-avoided so it can never be split off or dropped in print. */
+  .print-summary__disclaimer {
+    margin: 0 0 0.8rem;
+    padding: 0.5rem 0.65rem;
+    border: 2px solid #000;
+    border-radius: 4px;
+    font-size: 10pt;
+    line-height: 1.4;
+    break-inside: avoid;
+  }
+
+  .print-summary__config {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 1.5rem;
+    margin: 0 0 0.85rem;
+    break-inside: avoid;
+  }
+
+  .print-summary__config > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid #999;
+  }
+
+  .print-summary__config dt {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .print-summary__config dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  .print-summary__line,
+  .print-summary__methods,
+  .print-summary__prov {
+    margin: 0 0 0.55rem;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  .print-summary__badge {
+    display: inline-block;
+    padding: 0.02rem 0.4rem;
+    border: 1px solid #000;
+    border-radius: 999px;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .print-summary code {
+    background: none;
+    padding: 0;
+    font-size: 9.5pt;
+  }
+}
+
+/* Solver progress/error: an overlay pinned to the bottom of the scene stage, above the caption,
+   so it never shifts layout and is visible beside the scene at every width. The loading variant fades
+   in after a short delay, so a fast preset re-solve doesn't flash it. */
+.solver-status {
+  position: absolute;
+  left: 50%;
+  bottom: 0.85rem;
+  z-index: 2;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100% - 1.7rem);
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(13, 18, 38, 0.94);
+  color: var(--fg);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.solver-status p {
+  margin: 0;
+}
+
+.solver-status button {
+  margin-top: 0.45rem;
+}
+
+.solver-status--loading {
+  color: var(--fg-muted);
+  animation: solver-status-in 150ms ease-out 400ms both;
+}
+
+@keyframes solver-status-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.visualizer > * { min-width: 0; }
+.method-card__head { flex-wrap: wrap; }
+
+/* Keyboard entry point stays above the sticky disclaimer. */
+.skip-link { position: fixed; top: 0.5rem; left: 0.5rem; z-index: 10000; padding: 0.75rem 1rem; background: #fff; color: #111; transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+.app-main:focus-visible { outline: 2px solid #ffb454; outline-offset: -2px; }

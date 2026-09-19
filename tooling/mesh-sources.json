@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "verified": "2026-09-15",
+  "sources": {
+    "cortex": {
+      "filename": "mni152_2009.mz3",
+      "url": "https://raw.githubusercontent.com/niivue/niivue/ff3e68d3918d780b7346fe9593965e8433b19840/packages/niivue/demos/images/mni152_2009.mz3",
+      "revision": "ff3e68d3918d780b7346fe9593965e8433b19840",
+      "sha256": "65a251ce2db21dad3bbd8fb5acb6ebc3fa4f073bd610d5c877622e79a7b3c1b6"
+    },
+    "head": {
+      "filename": "tpl_head_T1.nii.gz",
+      "url": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz?versionId=TRRzRhgxEMxpNQDW_CZbInvRiTIUPlV5",
+      "objectVersion": "TRRzRhgxEMxpNQDW_CZbInvRiTIUPlV5",
+      "sha256": "1f27aabea9f7183dc0c69dafa71e1787b921ca778d655d9c1bf302b273d5627a"
+    }
+  },
+  "shipped": {
+    "brain.glb": "f8ec05ce1513df1f8a241f88ccfb5eaecb7e37eed966c629f8852e6382d42efb",
+    "scalp.glb": "e5a6208e1f32b55693015d02947d0a2074d25dcaef49dfa4a10febebbc3666af"
+  }
+}
