@@ -16,6 +16,9 @@ updates:
       # The toolchain is pinned to vitest 4; a major upgrade is a deliberate migration, not a bump.
       - dependency-name: vitest
         versions: ['>=5']
+      # The toolchain is pinned to TypeScript 6; TypeScript 7 is a deliberate compiler migration.
+      - dependency-name: typescript
+        versions: ['>=7']
       # Node type definitions track the Node 24 runtime (.nvmrc, engines).
       - dependency-name: '@types/node'
         versions: ['>=25']
