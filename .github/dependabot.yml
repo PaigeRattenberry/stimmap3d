@@ -9,6 +9,10 @@ updates:
         patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
       three:
         patterns: ['three', '@types/three', '@react-three/*']
+      # One weekly PR for routine dev-tool updates; runtime dependencies and majors stay separate.
+      dev-tooling:
+        dependency-type: development
+        update-types: ['minor', 'patch']
     ignore:
       # The AnalyticsPanel is built and locked on recharts 2.x. 3.x is a breaking major with no benefit for this panel.
       - dependency-name: recharts
