@@ -10,10 +10,15 @@ updates:
       three:
         patterns: ['three', '@types/three', '@react-three/*']
     ignore:
-      # M5 decision (CLAUDE.md, DESIGN.md): the AnalyticsPanel is built and locked on
-      # recharts 2.x. 3.x is a breaking major with no benefit for this panel.
+      # The AnalyticsPanel is built and locked on recharts 2.x. 3.x is a breaking major with no benefit for this panel.
       - dependency-name: recharts
         versions: ['>=3']
+      # The toolchain is pinned to vitest 4; a major upgrade is a deliberate migration, not a bump.
+      - dependency-name: vitest
+        versions: ['>=5']
+      # Node type definitions track the Node 24 runtime (.nvmrc, engines).
+      - dependency-name: '@types/node'
+        versions: ['>=25']
       # @react-three/fiber declares peer react ">=19 <19.3" up to and including 9.7.0, its latest.
       # React 19.3 therefore cannot dedupe against the R3F stack: npm installs a second copy and
       # every hook reads a null dispatcher. Revisit when fiber widens the range.
