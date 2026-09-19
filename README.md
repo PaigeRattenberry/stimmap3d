@@ -26,7 +26,7 @@ React/TypeScript, React Three Fiber, Zustand and a browser worker form a static 
 - [Architecture and scientific boundaries](DESIGN.md)
 - [Three engineering decisions with executable evidence](docs/engineering-decisions.md)
 - [AI-assisted workflow and review briefs](docs/agentic-development.md)
-- [Local validation results](docs/validation.md)
+- [Validation results](docs/validation.md)
 - [Contribution and validation commands](CONTRIBUTING.md)
 - [Release configuration](docs/release-controls.md)
 - [Asset reproducibility](tooling/README.md)

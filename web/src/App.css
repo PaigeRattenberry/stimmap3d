@@ -2210,7 +2210,7 @@ html {
 }
 
 /* ============================================================================
-   C6 — Printable clinician one-pager (V2-7b). The <PrintSummary> block is hidden
+   C6 — Printable one-page summary (V2-7b). The <PrintSummary> block is hidden
    on screen and revealed ONLY inside @media print, where the interactive chrome
    is hidden so the printout is a clean config + methods + provenance handout —
    with the disclaimer + "synthetic" badge + relative-units label baked in

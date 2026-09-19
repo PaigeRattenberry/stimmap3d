@@ -72,7 +72,7 @@ export function ShareBar() {
         {flash === 'idle' ? '' : STATUS_TEXT[flash]}
       </span>
       <span className="share-bar__hint">
-        Share this configuration — a deep link, a slide-ready PNG, or a print-ready clinician handout —
+        Share this configuration — a deep link, a slide-ready PNG, or a print-ready one-page summary —
         each carrying the “not&nbsp;for&nbsp;clinical&nbsp;use” + relative-units framing.
       </span>
     </div>

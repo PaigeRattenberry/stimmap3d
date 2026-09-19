@@ -6,6 +6,14 @@ Author: Paige Rattenberry. Educational rTMS targeting and electric-field visuali
 
 The app explains coil placement and published protocol comparisons. It is not a medical device, diagnostic tool, treatment planner, or patient-specific simulation. No backend or patient records are required. A persistent disclaimer appears on every route and exported figure. All individual trajectories are synthetic; all field values use relative units.
 
+Tests and source comments refer to these commitments as honesty gates:
+
+- **(a)** The non-clinical disclaimer is visible on every route and carried into exported and printed figures.
+- **(b)** The Methods & Limitations page is reachable and quotes the method statement and limitations in §3.2.
+- **(c)** Odds ratios are never plotted or mixed with absolute response rates; they become probabilities only against an explicit, labeled sham baseline (§4).
+- **(d)** All synthetic data is badged as synthetic, and every figure resolves to a citation-ledger entry.
+- **(e)** The E-field is shown only in clearly labeled relative units, never V/m or a calibrated dose.
+
 ## 2. Browser architecture
 
 Vite builds a static React/TypeScript application. Hash routes load the visualizer, Methods and Sources independently. React Three Fiber renders meshopt-compressed cortical and scalp meshes. Zustand owns coil pose, intensity, protocol and display settings. A worker computes field samples; the coalescer bounds work to one active solve and the newest pending request. Stale or failed results cannot establish export readiness. Typed arrays and reusable color buffers avoid allocating geometry on each update.

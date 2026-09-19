@@ -266,7 +266,7 @@ export const TOUR_STEPS: TourStep[] = [
         Every view is shareable from the toolbar up top: <strong>Copy link</strong> grabs a deep link
         that shares this configuration (rounded pose, camera not included), <strong>Export PNG</strong> saves a slide-ready snapshot with
         the <strong>disclaimer + relative-units label baked in</strong>, and{' '}
-        <strong>Print handout</strong> opens a print-ready clinician one-pager — each one carries the{' '}
+        <strong>Print handout</strong> opens a print-ready one-page summary — each one carries the{' '}
         “not for clinical use” framing wherever it travels.
       </>
     ),
