@@ -70,7 +70,7 @@ export default function App() {
 
   return (
     <>
-      {/* Print-only clinician one-pager (C6): display:none on screen, revealed in @media print with
+      {/* Print-only one-page summary (C6): display:none on screen, revealed in @media print with
           the disclaimer + "synthetic" + relative-units framing baked in, so the printed share
           artifact never loses gate (a)/(d)/(e) even though the on-screen banner doesn't print. */}
       <PrintSummary />

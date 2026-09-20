@@ -25,7 +25,7 @@ export type Colormap = 'viridis' | 'turbo' | 'cividis'
  * Canonical display labels for each colormap. Co-located with the {@link Colormap} union and keyed by
  * it, so adding a colormap to the type forces a label here (no silently-unreachable colormap). The
  * single source every UI surface renders — the ControlPanel toggle AND the print one-pager — so the
- * clinician handout can never show a different name than the on-screen control.
+ * printed summary can never show a different name than the on-screen control.
  */
 export const COLORMAP_LABELS: Record<Colormap, string> = {
   viridis: 'Viridis',

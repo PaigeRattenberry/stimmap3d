@@ -1,5 +1,5 @@
 /**
- * Printable clinician one-pager (V2-7b, improvement C6).
+ * Printable one-page summary (V2-7b, improvement C6).
  *
  * THE C2 HAZARD, HANDLED: the persistent App.tsx <DisclaimerBanner> is the only disclaimer surface,
  * and a print layout can silently drop it — exactly the leak the V2-4b PNG export also had to close.
@@ -13,7 +13,7 @@
  *
  * It is `display:none` on screen (App.css) and revealed only inside `@media print`, where the rest of
  * the interactive chrome is hidden — so the printout is a clean config + methods + provenance handout.
- * It reads the live store config so the sheet matches what the clinician has on screen.
+ * It reads the live store config so the sheet matches what the viewer has on screen.
  *
  * `aria-hidden` because it is a redundant print-only mirror of on-screen content — it must not add a
  * duplicate disclaimer to the screen-reader tree (the real banner already serves AT). The automated
