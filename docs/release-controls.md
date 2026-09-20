@@ -1,6 +1,6 @@
 # Release configuration
 
-This source tree builds a static site. Hosting destinations and security-reporting controls require maintainer configuration before release. The canonical and Open Graph URLs in web/index.html deliberately use https://example.invalid/; replace all three with the approved origin and rebuild. Add the verified demo URL to README only after deployment.
+This source tree builds a static site, deployed at https://stimmap3d.pages.dev. The canonical and Open Graph URLs in web/index.html carry that origin; deployArtifacts.test.ts requires all three to be absolute https on one origin, so a partial edit fails the build rather than shipping a broken link-preview card. Changing host or adding a custom domain means changing all three together, plus the README demo line and the repository homepage field.
 
 Run the checks in CONTRIBUTING.md, plus the Python/mesh pipeline in tooling/README.md. Review fresh screenshots and the generated THIRD_PARTY_NOTICES.txt. The README screenshot, docs/screenshots/visualizer.png, is captured manually from the production app and is also the input to the preview-card generator: after replacing it, run npm run make-og-image --prefix tooling to regenerate web/public/og-image.png.
 
