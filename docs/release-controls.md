@@ -10,4 +10,12 @@ Choose preview access explicitly. The repository is public, so every preview dep
 
 Before publishing, verify private vulnerability reporting, secret scanning/push protection and branch rules available for the selected repository. CI job names are Build & test (Node 24), Dependency audit (.), Dependency audit (tooling), Dependency audit (tooling/video), and Mesh pipeline and clinical anchors. Confirm actual emitted check names before configuring required checks. A direct Git deployment does not wait for unrelated CI jobs: protect main or use a CI-controlled deployment. The Pages build command covers the toolchain policy, tests, the shipped-dependency audit (npm audit --omit=dev) and the production build. It does not cover the production-browser checks, the development-dependency half of the root audit, the authoring audits or the mesh pipeline, which run only in CI. That split is deliberate: only packages that reach a visitor can stop a deployment, while CI's Dependency audit (.) job still runs the full audit and blocks merges. Require all five checks on main before connecting Pages so that only fully checked commits reach the production branch.
 
-After deployment, check HTTPS, effective headers, worker and model loading, shared links, routes, narrow layout, failure states, PNG export, print, Sources and notices while signed out. Only a live check can verify host behavior.
+After deployment, run the production-browser suite against the live origin rather than the artifact:
+
+```
+STIMMAP_SMOKE_BASE=https://stimmap3d.pages.dev node tooling/video/release-smoke.mjs
+```
+
+That covers routes, worker and model loading, shared links, narrow layout and zoom, failure states and PNG export against real host responses. Confirm HTTPS and the effective _headers rules separately, since no browser assertion reads them. Print output and the visual fidelity of an exported PNG still need a human, as does any real assistive technology; the suite checks that their labels are present and truthful, not that they look right.
+
+CI also runs weekly on a schedule. The dependency audits read the registry's current advisories, so their result changes without a commit, and deployment fails closed on `npm audit --omit=dev`; the weekly run surfaces an advisory against an idle repository rather than at deploy time.

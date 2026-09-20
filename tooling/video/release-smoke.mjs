@@ -1,21 +1,34 @@
-/** Production-artifact Chromium regressions. Requires npm ci --prefix tooling/video. */
+/**
+ * Production-artifact Chromium regressions. Requires npm ci --prefix tooling/video.
+ *
+ * By default this serves web/dist from a throwaway loopback server, which checks the ARTIFACT.
+ * Set STIMMAP_SMOKE_BASE to an origin (e.g. https://stimmap3d.pages.dev) to run the same checks
+ * against a real deployment instead, which additionally exercises what only a host can provide:
+ * the _headers rules, the served MIME type of the module worker, and HTTP caching. The local
+ * server is then never started, so no build is required. Checks that stub the worker or force
+ * WebGL to fail use page-level interception and behave identically either way.
+ *
+ * STIMMAP_SMOKE_FILTER narrows the run to checks whose name contains it.
+ */
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
 import { resolve, extname, sep } from 'node:path'
 import { chromium } from 'playwright'
 
+const remote = process.env.STIMMAP_SMOKE_BASE?.replace(/\/$/, '')
 const dist = resolve('web/dist')
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.glb': 'model/gltf-binary', '.png': 'image/png', '.txt': 'text/plain; charset=utf-8' }
-const server = createServer(async (req, res) => {
+const server = remote ? null : createServer(async (req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname)
   const file = resolve(dist, '.' + (pathname === '/' ? '/index.html' : pathname))
   if (!file.startsWith(dist + sep)) { res.writeHead(403).end(); return }
   try { res.setHeader('Content-Type', types[extname(file)] ?? 'application/octet-stream'); res.end(await readFile(file)) }
   catch { res.writeHead(404).end() }
 })
-await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
-const base = `http://127.0.0.1:${server.address().port}`
+if (server) await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+const base = remote ?? `http://127.0.0.1:${server.address().port}`
+console.log(remote ? `Checking deployment ${base}` : `Checking local artifact ${dist}`)
 const browser = await chromium.launch({ headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
 let passed = 0
 const failures = []
@@ -309,4 +322,4 @@ try {
   })
   console.log(`${passed} production-browser checks passed`)
   assert.equal(failures.length, 0, `Failed browser checks: ${failures.join("; ")}`)
-} finally { await browser.close(); await new Promise(resolve => server.close(resolve)) }
+} finally { await browser.close(); if (server) await new Promise(resolve => server.close(resolve)) }
