@@ -17,7 +17,9 @@ npm ci
 npm run dev
 ```
 
-For production output: `npm run build`, then `npm run preview`. The static artifact is `web/dist`. A hosted demo URL has not been configured.
+Live demo: **https://stimmap3d.pages.dev** — deployed from `main` on Cloudflare Pages, which only accepts commits that have passed the five required checks.
+
+For production output: `npm run build`, then `npm run preview`. The static artifact is `web/dist`. Note that `npm run preview` does not apply `web/public/_headers`; only the deployed host does.
 
 ## Engineering and validation
 
