@@ -6,8 +6,17 @@ on:
     branches: [main]
   # Check stacked PRs as well as PRs targeting main.
   pull_request:
+  # The dependency audits read the registry's CURRENT advisories, so their result can change with
+  # no commit. Deployment runs `npm audit --omit=dev` and fails closed, and main takes pull
+  # requests only, so an advisory first discovered at deploy time is slow to fix. A weekly run
+  # surfaces one against an idle repository instead.
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
 concurrency:
-  group: ci-${{ github.ref }}
+  # Scheduled and dispatched runs share a ref with the last push to main; keep them distinct so a
+  # weekly run cannot cancel a real one.
+  group: ci-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 permissions:
   contents: read
