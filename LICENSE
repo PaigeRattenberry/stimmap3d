@@ -19,14 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
--------------------------------------------------------------------------------
-NOTE ON THIRD-PARTY ASSETS AND DATA
-
-The MIT license above covers StimMap3D's own source code only. Third-party data,
-meshes, atlases, electrode coordinates, and any bundled reference outputs are
-licensed separately by their respective sources. Each such asset and every
-clinical figure records its source URL, license, and type in
-`web/src/data/citations.json`; see also DESIGN.md §4. Permissive-first sources
-were chosen deliberately; GPL-licensed tools (e.g. SimNIBS) are used only offline
-with their output data shipped, never their code.

@@ -33,4 +33,4 @@ React/TypeScript, React Three Fiber, Zustand and a browser worker form a static 
 
 ## Credits
 
-Code is [MIT licensed](LICENSE). Meshes, templates and dependencies retain their own terms: see the [citation ledger](web/src/data/citations.json), in-app Sources page and generated THIRD_PARTY_NOTICES.txt. Scientific attribution does not imply institutional affiliation or endorsement.
+Code is [MIT licensed](LICENSE). Meshes, templates and dependencies retain their own terms: see [NOTICE.md](NOTICE.md), the [citation ledger](web/src/data/citations.json), in-app Sources page and generated THIRD_PARTY_NOTICES.txt. Scientific attribution does not imply institutional affiliation or endorsement.
