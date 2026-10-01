@@ -3,7 +3,7 @@
 # Every pin below is imported by prep_meshes.py / generate_trials.py or required by one of them.
 fast-simplification==0.2.0
 imageio==2.37.4
-lazy-loader==0.5
+lazy-loader==0.6
 networkx==3.6.1
 nibabel==5.4.2
 numpy==2.5.3
