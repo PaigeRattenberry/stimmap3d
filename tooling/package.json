@@ -16,7 +16,7 @@
     "isosurface": "^1.0.0",
     "meshoptimizer": "^1.2.0",
     "nifti-reader-js": "^0.8.0",
-    "sharp": "^0.35.4"
+    "sharp": "^0.35.5"
   },
   "engines": {
     "node": ">=24 <25"
