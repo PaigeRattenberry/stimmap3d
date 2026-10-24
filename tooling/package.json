@@ -15,7 +15,7 @@
     "@gltf-transform/functions": "^4.5.0",
     "isosurface": "^1.0.0",
     "meshoptimizer": "^1.2.0",
-    "nifti-reader-js": "^0.8.0",
+    "nifti-reader-js": "^0.8.1",
     "sharp": "^0.35.4"
   },
   "engines": {
