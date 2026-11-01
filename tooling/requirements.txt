@@ -12,5 +12,5 @@ pillow==12.3.0
 scikit-image==0.26.0
 scipy==1.18.1
 tifffile==2026.9.15
-trimesh==5.1.0
+trimesh==5.2.0
 typing-extensions==4.16.0
