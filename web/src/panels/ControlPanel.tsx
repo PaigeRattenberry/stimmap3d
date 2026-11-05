@@ -269,8 +269,8 @@ export function ControlPanel() {
         />
         <p className="control-hint control-hint--muted">
           Cants the coil off the scalp about the target — modeled as a larger effective
-          coil-to-cortex distance: deeper half-value depth, broader focal spread, lower % output
-          (see the depth–dose readout). Survives preset re-snaps.
+          coil-to-cortex distance: deeper half-value depth and broader focal spread (see the
+          depth–dose readout). Survives preset re-snaps.
         </p>
       </section>
 
