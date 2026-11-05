@@ -18,7 +18,7 @@ Tests and source comments refer to these commitments as honesty gates:
 
 Vite builds a static React/TypeScript application. Hash routes load the visualizer, Methods and Sources independently. React Three Fiber renders meshopt-compressed cortical and scalp meshes. Zustand owns coil pose, intensity, protocol and display settings. A worker computes field samples; the coalescer bounds work to one active solve and the newest pending request. Stale or failed results cannot establish export readiness. Typed arrays and reusable color buffers avoid allocating geometry on each update.
 
-The rendering channels update field colors and metrics without requiring a React render for each sample. Continuous field colors use a robust peak; contours use the absolute field maximum. Fixed-scale mode uses a separate intensity-1 reference solve. Viridis is the default; Turbo and grayscale are explicit alternatives. Mesh coordinates are MNI millimetres, rotated to Y-up for display.
+The rendering channels update field colors and metrics without requiring a React render for each sample. Continuous field colors use a robust peak; contours use the absolute field maximum. Fixed-scale mode uses a separate intensity-1 reference solve. Viridis is the default; Turbo and Cividis are explicit alternatives. Mesh coordinates are MNI millimetres, rotated to Y-up for display.
 
 PNG export requires the current geometry, worker result and painted frame to agree. Loading and failure invalidate output; a previously valid canvas alone is insufficient. Shared URLs encode configuration, with pose rounded to three decimals, but do not encode camera orbit or zoom. Custom placements are illustrative, not guaranteed scalp contact.
 

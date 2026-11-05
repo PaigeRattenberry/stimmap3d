@@ -6,7 +6,7 @@ An educational 3D visualizer for rTMS coil targeting, induced electric fields an
 
 ![StimMap3D visualizer with relative-unit heatmap and targeting controls](docs/screenshots/visualizer.png)
 
-Choose a targeting preset, move or rotate the figure-8 coil, then compare the field footprint and cited analytics. The guided tour explains the controls. Methods describes the approximation; Sources lists scientific references and licenses. PNG export and a printable summary retain the non-clinical context.
+Choose a targeting preset, move or tilt the figure-8 coil, then compare the field footprint and cited analytics. The guided tour explains the controls. Methods describes the approximation; Sources lists scientific references and licenses. PNG export and a printable summary retain the non-clinical context.
 
 ## Run locally
 
