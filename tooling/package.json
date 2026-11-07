@@ -10,9 +10,9 @@
     "make-og-image": "node make_og_image.mjs"
   },
   "dependencies": {
-    "@gltf-transform/core": "^4.5.0",
-    "@gltf-transform/extensions": "^4.5.0",
-    "@gltf-transform/functions": "^4.5.0",
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
     "isosurface": "^1.0.0",
     "meshoptimizer": "^1.2.0",
     "nifti-reader-js": "^0.8.0",
