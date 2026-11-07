@@ -11,13 +11,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.8",
-    "@react-three/fiber": "^9.7.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
     "d3-scale-chromatic": "^3.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "recharts": "^2.15.4",
-    "three": "^0.186.0",
+    "three": "^0.187.0",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "@types/node": "^24.13.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@types/three": "^0.186.0",
+    "@types/three": "^0.187.0",
     "@vitejs/plugin-react": "^6.1.1",
     "axe-core": "^4.13.0",
     "happy-dom": "^21.0.4",
